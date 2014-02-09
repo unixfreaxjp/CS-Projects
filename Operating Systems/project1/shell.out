@@ -1,0 +1,305 @@
+akshay@ubuntu:~/cs3013/project1$ ./shell < shell_test 
+==>INPUT:cat runstat.c
+
+#include "runstat.h"
+
+long timeval_to_ms(struct timeval* t)
+{
+	return (t->tv_sec*1000 + t->tv_usec/1000);
+}
+
+void runstat(char** argv)
+{
+	//printf("------RUNSTAT------\n");
+	int childPID;
+	struct timeval before, after;
+	struct rusage resource_usage;
+
+	childPID = fork();
+	
+	gettimeofday(&before, NULL);
+	
+	if(childPID < 0){
+		printf("fork() failed\n");
+	} else if(childPID == 0){
+		//printf("exec %s\n", argv[0] );
+
+		//int i = -1;
+		//while(argv[++i] != 0)printf("%s\n", argv[i]);
+
+		execvp(argv[0], argv);
+	} else {
+		//printf("wait(%d)", childPID);
+		wait(childPID);
+		gettimeofday(&after, NULL);
+
+		getrusage(RUSAGE_CHILDREN , &resource_usage);
+
+		long elapsed = timeval_to_ms(&after)-timeval_to_ms(&before);
+		long userTime = timeval_to_ms(&(resource_usage.ru_utime));
+		long cpuTime = timeval_to_ms(&(resource_usage.ru_stime));		
+		
+		printf("\nStats for child %d (%s) :\n", childPID, argv[0]);
+		printf("\tElapsed time: %ldms\n", elapsed);
+		printf("\tUser CPU time: %ldms\n", userTime);
+		printf("\tSystem CPU time: %ldms\n", cpuTime);
+		printf("\tInvoluntary context switches: %ld\n", resource_usage.ru_nivcsw);
+		printf("\tVoluntary context switches: %ld\n", resource_usage.ru_nvcsw);
+		printf("\tMajor page faults: %ld\n", resource_usage.ru_majflt);
+		printf("\tMinor page faults: %ld\n", resource_usage.ru_minflt);	
+		
+	}
+}
+
+
+Stats for child 6759 (cat) :
+	Elapsed time: 1ms
+	User CPU time: 0ms
+	System CPU time: 0ms
+	Involuntary context switches: 149
+	Voluntary context switches: 1
+	Major page faults: 0
+	Minor page faults: 189
+==>INPUT:echo 1 2 3 4 5 6 7 8 9 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 
+
+1 2 3 4 5 6 7 8 9 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+
+Stats for child 6761 (echo) :
+	Elapsed time: 1ms
+	User CPU time: 0ms
+	System CPU time: 0ms
+	Involuntary context switches: 3
+	Voluntary context switches: 1
+	Major page faults: 0
+	Minor page faults: 181
+==>INPUT:echo 1 2 3 4 5 6 7 8 9 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 toomanytokens
+
+1 2 3 4 5 6 7 8 9 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 toomanytokens
+
+Stats for child 6763 (echo) :
+	Elapsed time: 0ms
+	User CPU time: 0ms
+	System CPU time: 0ms
+	Involuntary context switches: 3
+	Voluntary context switches: 1
+	Major page faults: 0
+	Minor page faults: 180
+==>INPUT:who
+
+akshay   tty7         2014-01-28 19:20
+akshay   pts/0        2014-01-28 21:41 (:0.0)
+
+Stats for child 6765 (who) :
+	Elapsed time: 1ms
+	User CPU time: 0ms
+	System CPU time: 0ms
+	Involuntary context switches: 5
+	Voluntary context switches: 1
+	Major page faults: 0
+	Minor page faults: 249
+==>INPUT:ps -e
+
+  PID TTY          TIME CMD
+    1 ?        00:00:00 init
+    2 ?        00:00:00 kthreadd
+    3 ?        00:00:00 ksoftirqd/0
+    5 ?        00:00:00 kworker/u:0
+    6 ?        00:00:00 migration/0
+    7 ?        00:00:00 watchdog/0
+    8 ?        00:00:00 migration/1
+   10 ?        00:00:00 ksoftirqd/1
+   11 ?        00:00:00 kworker/0:1
+   12 ?        00:00:00 watchdog/1
+   13 ?        00:00:00 migration/2
+   15 ?        00:00:00 ksoftirqd/2
+   16 ?        00:00:00 watchdog/2
+   17 ?        00:00:00 cpuset
+   18 ?        00:00:00 khelper
+   19 ?        00:00:00 kdevtmpfs
+   20 ?        00:00:00 netns
+   21 ?        00:00:00 kworker/u:1
+   22 ?        00:00:00 sync_supers
+   23 ?        00:00:00 bdi-default
+   24 ?        00:00:00 kintegrityd
+   25 ?        00:00:00 kblockd
+   26 ?        00:00:00 ata_sff
+   27 ?        00:00:00 khubd
+   28 ?        00:00:00 md
+   30 ?        00:00:00 khungtaskd
+   31 ?        00:00:00 kswapd0
+   32 ?        00:00:00 ksmd
+   33 ?        00:00:00 khugepaged
+   34 ?        00:00:00 fsnotify_mark
+   35 ?        00:00:00 ecryptfs-kthrea
+   36 ?        00:00:00 crypto
+   47 ?        00:00:00 kthrotld
+   48 ?        00:00:00 kworker/1:1
+   49 ?        00:00:00 scsi_eh_0
+   50 ?        00:00:00 scsi_eh_1
+   71 ?        00:00:00 devfreq_wq
+   73 ?        00:00:00 kworker/1:2
+  184 ?        00:00:00 mpt_poll_0
+  192 ?        00:00:00 mpt/0
+  239 ?        00:00:00 scsi_eh_2
+  257 ?        00:00:01 jbd2/sda1-8
+  258 ?        00:00:00 ext4-dio-unwrit
+  348 ?        00:00:00 upstart-udev-br
+  350 ?        00:00:00 udevd
+  419 ?        00:00:00 ttm_swap
+  487 ?        00:00:00 udevd
+  536 ?        00:00:00 kpsmoused
+  597 ?        00:00:00 upstart-socket-
+  715 ?        00:00:00 dbus-daemon
+  737 ?        00:00:00 modem-manager
+  763 ?        00:00:01 rsyslogd
+  764 ?        00:00:00 NetworkManager
+  772 ?        00:00:00 cupsd
+  808 ?        00:00:00 avahi-daemon
+  809 ?        00:00:00 avahi-daemon
+  814 ?        00:00:00 polkitd
+  831 ?        00:00:00 colord
+  838 ?        00:00:00 dhclient
+  874 tty4     00:00:00 getty
+  917 tty5     00:00:00 getty
+  923 tty2     00:00:00 getty
+  924 tty3     00:00:00 getty
+  926 tty6     00:00:00 getty
+  931 ?        00:00:00 acpid
+  935 ?        00:00:00 lightdm
+  937 ?        00:00:00 irqbalance
+  938 ?        00:00:00 cron
+  939 ?        00:00:00 atd
+  942 ?        00:00:00 whoopsie
+ 1183 tty1     00:00:00 getty
+ 1220 ?        00:00:00 accounts-daemon
+ 1284 ?        00:00:00 console-kit-dae
+ 1800 ?        00:00:00 upowerd
+ 1883 ?        00:00:00 vmware-vmblock-
+ 2036 ?        00:00:08 vmtoolsd
+ 2073 ?        00:00:00 rtkit-daemon
+ 2076 ?        00:00:00 tpvmlp
+ 2111 ?        00:00:00 dnsmasq
+ 2286 ?        00:00:00 udisks-daemon
+ 2287 ?        00:00:00 udisks-daemon
+ 4302 ?        00:00:00 flush-8:0
+ 4791 tty7     00:00:46 Xorg
+ 4792 ?        00:00:00 kworker/0:2
+ 4884 ?        00:00:00 lightdm <defunct>
+ 4937 ?        00:00:00 lightdm
+ 4973 ?        00:00:00 gnome-keyring-d
+ 4984 ?        00:00:00 gnome-session
+ 5019 ?        00:00:00 ssh-agent
+ 5022 ?        00:00:00 dbus-launch
+ 5023 ?        00:00:01 dbus-daemon
+ 5031 ?        00:00:00 gnome-settings-
+ 5042 ?        00:00:00 gvfsd
+ 5044 ?        00:00:00 gvfs-fuse-daemo
+ 5051 ?        00:01:00 compiz
+ 5054 ?        00:00:00 gconfd-2
+ 5060 ?        00:00:04 nautilus
+ 5061 ?        00:00:00 bluetooth-apple
+ 5062 ?        00:00:00 nm-applet
+ 5065 ?        00:00:00 gnome-fallback-
+ 5069 ?        00:00:00 polkit-gnome-au
+ 5075 ?        00:00:00 pulseaudio
+ 5077 ?        00:00:02 vmtoolsd
+ 5086 ?        00:00:00 gconf-helper
+ 5093 ?        00:00:00 gvfs-gdu-volume
+ 5100 ?        00:00:00 gvfs-gphoto2-vo
+ 5102 ?        00:00:00 gvfs-afc-volume
+ 5111 ?        00:00:00 gvfsd-trash
+ 5128 ?        00:00:01 bamfdaemon
+ 5153 ?        00:00:00 sh
+ 5154 ?        00:00:00 gtk-window-deco
+ 5161 ?        00:00:00 gvfsd-burn
+ 5167 ?        00:00:01 hud-service
+ 5168 ?        00:00:02 unity-panel-ser
+ 5182 ?        00:00:00 indicator-sessi
+ 5187 ?        00:00:00 indicator-appli
+ 5189 ?        00:00:00 indicator-messa
+ 5193 ?        00:00:00 indicator-sound
+ 5207 ?        00:00:00 indicator-print
+ 5213 ?        00:00:00 indicator-datet
+ 5240 ?        00:00:00 geoclue-master
+ 5245 ?        00:00:00 ubuntu-geoip-pr
+ 5258 ?        00:00:00 unity-applicati
+ 5261 ?        00:00:00 unity-music-dae
+ 5263 ?        00:00:00 unity-lens-vide
+ 5264 ?        00:00:00 unity-files-dae
+ 5292 ?        00:00:00 zeitgeist-daemo
+ 5299 ?        00:00:00 zeitgeist-fts
+ 5300 ?        00:00:00 zeitgeist-datah
+ 5306 ?        00:00:00 cat
+ 5319 ?        00:00:00 unity-musicstor
+ 5321 ?        00:00:00 unity-scope-vid
+ 5408 ?        00:00:00 gdu-notificatio
+ 5412 ?        00:00:00 telepathy-indic
+ 5418 ?        00:00:00 mission-control
+ 5423 ?        00:00:00 goa-daemon
+ 5448 ?        00:00:00 gnome-screensav
+ 5458 ?        00:00:00 update-notifier
+ 5508 ?        00:00:00 deja-dup-monito
+ 5570 ?        00:00:00 udevd
+ 5639 ?        00:00:00 dconf-service
+ 5703 ?        00:00:01 evince
+ 5710 ?        00:00:00 evinced
+ 5722 ?        00:00:00 gvfsd-metadata
+ 5748 ?        00:00:00 sh
+ 5749 ?        00:00:05 gnome-terminal
+ 5753 ?        00:00:00 gnome-pty-helpe
+ 5754 pts/0    00:00:00 bash
+ 5861 ?        00:00:13 gedit
+ 6076 ?        00:00:00 at-spi-bus-laun
+ 6291 ?        00:00:00 kworker/2:2
+ 6487 ?        00:00:00 kworker/2:0
+ 6643 ?        00:00:00 notify-osd
+ 6736 ?        00:00:00 kworker/2:1
+ 6756 ?        00:00:00 tpvmlp
+ 6757 pts/0    00:00:00 shell
+ 6766 pts/0    00:00:00 shell
+ 6767 pts/0    00:00:00 ps
+
+Stats for child 6767 (ps) :
+	Elapsed time: 7ms
+	User CPU time: 4ms
+	System CPU time: 0ms
+	Involuntary context switches: 319
+	Voluntary context switches: 1
+	Major page faults: 0
+	Minor page faults: 293
+==>INPUT:cd /
+
+==>INPUT:ls -a
+
+.   bin   cdrom  etc   initrd.img      lib	   media  opt	root  sbin     srv  tmp  var	  vmlinuz.old
+..  boot  dev	 home  initrd.img.old  lost+found  mnt	  proc	run   selinux  sys  usr  vmlinuz
+
+Stats for child 6769 (ls) :
+	Elapsed time: 1ms
+	User CPU time: 0ms
+	System CPU time: 0ms
+	Involuntary context switches: 17
+	Voluntary context switches: 1
+	Major page faults: 0
+	Minor page faults: 280
+==>INPUT:cowsay MoOOooOOOoooO
+
+ _______________
+< MoOOooOOOoooO >
+ ---------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+Stats for child 6771 (cowsay) :
+	Elapsed time: 24ms
+	User CPU time: 20ms
+	System CPU time: 0ms
+	Involuntary context switches: 17
+	Voluntary context switches: 1
+	Major page faults: 0
+	Minor page faults: 1106
+==>INPUT:exit
+

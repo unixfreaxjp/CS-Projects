@@ -1,0 +1,12 @@
+doit
+doit.c
+ls.out
+Makefile
+runstat.c
+runstat.h
+runstat.o
+shell
+shell.c
+shell.c~
+testcommands
+toomanytokens

@@ -1,0 +1,34 @@
+//Symbol Name		Page Address
+//----------------	------------
+//	DIV                     3044
+//	DIV1                    3078
+//	LOOP                    303E
+//	LOOPD                   307D
+//	MULT                    3024
+//	MULT1                   303C
+//	SAVE_R1                 3043
+//	az                      306E
+//	bn                      304B
+//	bnan                    304F
+//	bnap                    3057
+//	bp                      3060
+//	bpan                    3064
+//	bpap                    306C
+//	bz                      305D
+//	divdone                 3071
+//	notneg                  3031
+//	notneg0                 302B
+//	notzero                 3035
+//	nten                    3021
+//	nthree                  3022
+//	reg0                    3039
+//	reg0d                   3075
+//	reg0d1                  3088
+//	reg1                    303A
+//	reg1d                   3076
+//	reg1d1                  3089
+//	reg7                    303B
+//	reg7d                   3077
+//	ten                     301F
+//	three                   3020
+//	zero                    3023

@@ -1,0 +1,16 @@
+//Symbol Name		Page Address
+//----------------	------------
+//	DDR                     071B
+//	DSR                     071A
+//	KBDR                    0719
+//	KBSR                    0718
+//	done                    0714
+//	maxprint                071F
+//	minprint                071E
+//	pcinc                   071C
+//	reg1                    0720
+//	reg2                    0721
+//	reg3                    0722
+//	star                    071D
+//	waitin                  0703
+//	waitout                 0710

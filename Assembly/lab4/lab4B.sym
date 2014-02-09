@@ -1,0 +1,15 @@
+//Symbol Name		Page Address
+//----------------	------------
+//	AGAIN                   3011
+//	CONT                    3015
+//	DONE                    3029
+//	INPUT                   3006
+//	LOOP                    3016
+//	NLINE                   302C
+//	NO                      3027
+//	NOMSG                   305C
+//	PCHECK                  300D
+//	PTR                     302B
+//	STRTMSG                 302D
+//	YES                     3023
+//	YESMSG                  3041

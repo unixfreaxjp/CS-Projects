@@ -1,0 +1,6 @@
+racecar
+wasiteliotstoiletisaw
+a palindrome
+cheeseezeehc
+wow
+foobar

@@ -1,0 +1,18 @@
+//Symbol Name		Page Address
+//----------------	------------
+//	CR                      3049
+//	LF                      3048
+//	MAIN                    3000
+//	STRIN                   3021
+//	done                    303E
+//	endl                    300A
+//	loop                    302D
+//	maxlen                  300B
+//	reg0                    304A
+//	reg2                    304B
+//	reg3                    304C
+//	reg4                    304D
+//	reg5                    304E
+//	reg6                    304F
+//	reg7                    3050
+//	str0                    300C

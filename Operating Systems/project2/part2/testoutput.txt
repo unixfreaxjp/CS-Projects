@@ -1,0 +1,639 @@
+akshay@ubuntu:~/cs3013/project2/part2/LKM$ sudo insmod getprinfo_LKM.ko
+akshay@ubuntu:~/cs3013/project2/part2/LKM$ ../user-space/testcall 
+
+
+	state = 0 
+	pid = 28245 
+	parent pid = 28243 
+	youngest child = -1 
+	younger sibling = 28247 
+	older sibling = 28244 
+	uid = 1001 
+	start time = 22225453525879 
+	user time = 0 
+	sys time = 0 
+	children utime = 0 
+	children stime = 0 
+
+
+
+state = 0 
+pid = 28243 
+parent pid = 27594 
+youngest child = -1792315216 
+younger sibling = -1 
+older sibling = -1 
+uid = 1001 
+start time = 22225452797915 
+user time = 0 
+sys time = 0 
+children utime = 0 
+children stime = 0 
+ 
+	state = 0 
+	pid = 28244 
+	parent pid = 1 
+	youngest child = -2146634751 
+	younger sibling = 28245 
+	older sibling = 27584 
+	uid = 1001 
+	start time = 22225453478479 
+	user time = 0 
+	sys time = 0 
+	children utime = 0 
+	children stime = 0 
+
+
+		state = 0 
+		pid = 28251 
+		parent pid = 28244 
+		youngest child = -1 
+
+		younger sibling = -1 
+	state = 0 
+		older sibling = 28248 
+	pid = 28244 
+		uid = 1001 
+	parent pid = 1 
+		start time = 22227227379522 
+	youngest child = 1325331561 
+		user time = 0 
+	younger sibling = 28245 
+		sys time = 0 
+	older sibling = 27584 
+		children utime = 0 
+	uid = 1001 
+		children stime = 0 
+	start time = 22225453478479 
+
+	user time = 0 
+	sys time = 0 
+	children utime = 0 
+
+	children stime = 0 
+
+		state = 0 
+		pid = 28252 
+		parent pid = 28244 
+		youngest child = -1 
+		younger sibling = -1 
+		older sibling = 28251 
+		uid = 1001 
+		start time = 22227227446455 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+		state = 0 
+
+		pid = 28251 
+		state = 0 
+		parent pid = 28244 
+		pid = 28252 
+		youngest child = -123824723 
+		parent pid = 28244 
+		younger sibling = 28252 
+		youngest child = -1 
+		older sibling = 28248 
+		younger sibling = -1 
+		uid = 1001 
+		start time = 22227227379522 
+		older sibling = 28251 
+		user time = 0 
+		uid = 1001 
+		sys time = 0 
+		start time = 22227227446455 
+		children utime = 0 
+		user time = 0 
+		children stime = 0 
+		sys time = 0 
+
+		children utime = 0 
+		children stime = 0 
+
+
+			state = 0 
+			pid = 28253 
+			parent pid = 1 
+			youngest child = -1 
+			younger sibling = -1 
+			older sibling = 28248 
+			uid = 1001 
+			start time = 22227227535388 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+			state = 0 
+			pid = 28253 
+			parent pid = 1 
+			youngest child = -1 
+			younger sibling = -1 
+			older sibling = 28248 
+			uid = 1001 
+			start time = 22227227535388 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+		state = 0 
+		pid = 28246 
+		parent pid = 1 
+		youngest child = -1 
+		younger sibling = 28247 
+		older sibling = 28245 
+		uid = 1001 
+		start time = 22225453539267 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+		state = 0 
+		pid = 28246 
+		parent pid = 1 
+		youngest child = 25910268 
+		younger sibling = 28247 
+		older sibling = 28245 
+		uid = 1001 
+		start time = 22225453539267 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+			state = 0 
+			pid = 28254 
+			parent pid = 28246 
+			youngest child = -1 
+			younger sibling = -1 
+			older sibling = -1 
+			uid = 1001 
+			start time = 22227378405539 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+			state = 0 
+			pid = 28254 
+			parent pid = 28246 
+			youngest child = -1 
+			younger sibling = 28255 
+			older sibling = -1 
+			uid = 1001 
+			start time = 22227378405539 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+		state = 0 
+		pid = 28246 
+		parent pid = 1 
+		youngest child = 1556832461 
+		younger sibling = 28247 
+		older sibling = 28245 
+		uid = 1001 
+		start time = 22225453539267 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+			state = 0 
+			pid = 28255 
+			parent pid = 28246 
+			youngest child = -1 
+			younger sibling = 28256 
+			older sibling = 28254 
+			uid = 1001 
+			start time = 22227378498237 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+			state = 0 
+			pid = 28254 
+			parent pid = 1 
+			youngest child = -1411186499 
+			younger sibling = 28255 
+			older sibling = 28248 
+			uid = 1001 
+			start time = 22227378405539 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+			state = 0 
+			pid = 28255 
+			parent pid = 1 
+			youngest child = -14838395 
+			younger sibling = 28256 
+			older sibling = 28254 
+			uid = 1001 
+			start time = 22227378498237 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+			state = 0 
+			pid = 28256 
+			parent pid = 1 
+			youngest child = -1 
+			younger sibling = 28257 
+			older sibling = 28255 
+			uid = 1001 
+			start time = 22227378532285 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+			state = 0 
+			pid = 28256 
+			parent pid = 1 
+			youngest child = -1 
+			younger sibling = 28257 
+			older sibling = 28255 
+			uid = 1001 
+			start time = 22227378532285 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+				state = 0 
+				pid = 28258 
+				parent pid = 1 
+				youngest child = -1 
+				younger sibling = 28259 
+				older sibling = 28257 
+				uid = 1001 
+				start time = 22227378623169 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+				state = 0 
+				pid = 28258 
+				parent pid = 1 
+				youngest child = -1 
+				younger sibling = 28259 
+				older sibling = 28257 
+				uid = 1001 
+				start time = 22227378623169 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+				state = 0 
+				pid = 28257 
+				parent pid = 1 
+				youngest child = -1 
+				younger sibling = 28258 
+				older sibling = 28248 
+				uid = 1001 
+				start time = 22227378579926 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+				state = 0 
+				pid = 28257 
+				parent pid = 1 
+				youngest child = 1658836375 
+				younger sibling = 28259 
+				older sibling = 28248 
+				uid = 1001 
+				start time = 22227378579926 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+					state = 0 
+					pid = 28260 
+					parent pid = 1 
+					youngest child = -1 
+					younger sibling = -1 
+					older sibling = 28259 
+					uid = 1001 
+					start time = 22227379181625 
+					user time = 0 
+					sys time = 0 
+					children utime = 0 
+					children stime = 0 
+
+
+					state = 0 
+					pid = 28260 
+					parent pid = 1 
+					youngest child = -1 
+					younger sibling = -1 
+					older sibling = 28259 
+					uid = 1001 
+					start time = 22227379181625 
+					user time = 0 
+					sys time = 0 
+					children utime = 0 
+					children stime = 0 
+
+
+				state = 0 
+				pid = 28259 
+				parent pid = 1 
+				youngest child = -1 
+				younger sibling = -1 
+				older sibling = 28248 
+				uid = 1001 
+				start time = 22227378666823 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+				state = 0 
+				pid = 28259 
+				parent pid = 1 
+				youngest child = -1 
+				younger sibling = -1 
+				older sibling = 28248 
+				uid = 1001 
+				start time = 22227378666823 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+		state = 0 
+		pid = 28248 
+		parent pid = 1 
+		youngest child = -1 
+		younger sibling = -1 
+		older sibling = 28247 
+		uid = 1001 
+		start time = 22225453575160 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+		state = 0 
+		pid = 28248 
+		parent pid = 1 
+		youngest child = -1 
+		younger sibling = -1 
+		older sibling = 28247 
+		uid = 1001 
+		start time = 22225453575160 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+			state = 0 
+			pid = 28261 
+			parent pid = 28248 
+			youngest child = -1 
+			younger sibling = -1 
+
+			older sibling = -1 
+		state = 0 
+			uid = 1001 
+		pid = 28248 
+			start time = 22227724655578 
+		parent pid = 1 
+			user time = 0 
+		youngest child = -1574590960 
+			sys time = 0 
+		younger sibling = -1 
+			children utime = 0 
+		older sibling = 28247 
+			children stime = 0 
+		uid = 1001 
+
+		start time = 22225453575160 
+
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+			state = 0 
+			pid = 28262 
+			parent pid = 28248 
+			youngest child = -1 
+			younger sibling = -1 
+			older sibling = 28261 
+			uid = 1001 
+			start time = 22227724720748 
+			user time = 0 
+			sys time = 0 
+			children utime = 0 
+			children stime = 0 
+
+
+			state = 0 
+			pid = 28262 
+
+			parent pid = 28248 
+			state = 0 
+			youngest child = -1 
+			pid = 28261 
+			younger sibling = -1 
+			parent pid = 28248 
+			older sibling = 28261 
+			youngest child = 1658948489 
+			uid = 1001 
+			younger sibling = 28262 
+			start time = 22227724720748 
+			older sibling = -1 
+			user time = 0 
+			uid = 1001 
+			sys time = 0 
+			start time = 22227724655578 
+			children utime = 0 
+			user time = 0 
+			children stime = 0 
+			sys time = 0 
+
+			children utime = 0 
+			children stime = 0 
+
+
+				state = 0 
+				pid = 28263 
+				parent pid = 1 
+				youngest child = -1 
+				younger sibling = -1 
+				older sibling = 28262 
+				uid = 1001 
+				start time = 22227724817747 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+				state = 0 
+				pid = 28263 
+				parent pid = 1 
+				youngest child = -1 
+				younger sibling = -1 
+				older sibling = 28247 
+				uid = 1001 
+				start time = 22227724817747 
+				user time = 0 
+				sys time = 0 
+				children utime = 0 
+				children stime = 0 
+
+
+	state = 0 
+	pid = 28247 
+	parent pid = 1 
+	youngest child = -1 
+	younger sibling = -1 
+	older sibling = 28245 
+	uid = 1001 
+	start time = 22225453569488 
+	user time = 0 
+	sys time = 0 
+	children utime = 0 
+	children stime = 0 
+
+
+	state = 0 
+	pid = 28247 
+	parent pid = 1 
+	youngest child = -1 
+	younger sibling = -1 
+	older sibling = 28245 
+	uid = 1001 
+	start time = 22225453569488 
+	user time = 0 
+	sys time = 0 
+	children utime = 0 
+	children stime = 0 
+
+
+	state = 0 
+	pid = 28245 
+	parent pid = 1 
+	youngest child = -1868498997 
+	younger sibling = -1 
+	older sibling = 27584 
+	uid = 1001 
+	start time = 22225453525879 
+	user time = 0 
+	sys time = 0 
+	children utime = 0 
+	children stime = 0 
+
+
+		state = 0 
+		pid = 28249 
+		parent pid = 1 
+		youngest child = -1 
+		younger sibling = -1 
+		older sibling = 27584 
+		uid = 1001 
+		start time = 22226505875002 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+		state = 0 
+		pid = 28249 
+		parent pid = 1 
+		youngest child = -1 
+		younger sibling = -1 
+		older sibling = 27584 
+		uid = 1001 
+		start time = 22226505875002 
+		user time = 0 
+		sys time = 0 
+		children utime = 0 
+		children stime = 0 
+
+
+akshay@ubuntu:~/cs3013/project2/part2/LKM$ 
+akshay@ubuntu:~/cs3013/project2/part2/LKM$ 
+akshay@ubuntu:~/cs3013/project2/part2/LKM$ sudo tail -n 100 /var/log/syslog
+
+Feb  8 22:53:10 ubuntu kernel: [22203.214049] Loaded interceptor!
+Feb  8 22:53:11 ubuntu kernel: [22213.993645] Got prinfo for 28245 
+Feb  8 22:53:11 ubuntu kernel: [22214.508915] Got prinfo for 28243 
+Feb  8 22:53:11 ubuntu kernel: [22214.714733] Got prinfo for 28244 
+Feb  8 22:53:11 ubuntu kernel: [22214.714909] Got prinfo for 28251 
+Feb  8 22:53:11 ubuntu kernel: [22214.714937] Got prinfo for 28244 
+Feb  8 22:53:11 ubuntu kernel: [22214.714963] Got prinfo for 28252 
+Feb  8 22:53:11 ubuntu kernel: [22214.715010] Got prinfo for 28251 
+Feb  8 22:53:11 ubuntu kernel: [22214.715016] Got prinfo for 28252 
+Feb  8 22:53:11 ubuntu kernel: [22214.715312] Got prinfo for 28253 
+Feb  8 22:53:11 ubuntu kernel: [22214.715366] Got prinfo for 28253 
+Feb  8 22:53:11 ubuntu kernel: [22214.865677] Got prinfo for 28246 
+Feb  8 22:53:11 ubuntu kernel: [22214.865818] Got prinfo for 28246 
+Feb  8 22:53:11 ubuntu kernel: [22214.865844] Got prinfo for 28254 
+Feb  8 22:53:11 ubuntu kernel: [22214.865898] Got prinfo for 28254 
+Feb  8 22:53:11 ubuntu kernel: [22214.865916] Got prinfo for 28246 
+Feb  8 22:53:11 ubuntu kernel: [22214.865943] Got prinfo for 28255 
+Feb  8 22:53:11 ubuntu kernel: [22214.866021] Got prinfo for 28254 
+Feb  8 22:53:11 ubuntu kernel: [22214.866067] Got prinfo for 28255 
+Feb  8 22:53:11 ubuntu kernel: [22214.866135] Got prinfo for 28256 
+Feb  8 22:53:11 ubuntu kernel: [22214.866188] Got prinfo for 28256 
+Feb  8 22:53:11 ubuntu kernel: [22214.866312] Got prinfo for 28258 
+Feb  8 22:53:11 ubuntu kernel: [22214.866368] Got prinfo for 28258 
+Feb  8 22:53:11 ubuntu kernel: [22214.866474] Got prinfo for 28257 
+Feb  8 22:53:11 ubuntu kernel: [22214.866568] Got prinfo for 28257 
+Feb  8 22:53:11 ubuntu kernel: [22214.866711] Got prinfo for 28260 
+Feb  8 22:53:11 ubuntu kernel: [22214.866771] Got prinfo for 28260 
+Feb  8 22:53:11 ubuntu kernel: [22214.867596] Got prinfo for 28259 
+Feb  8 22:53:11 ubuntu kernel: [22214.867647] Got prinfo for 28259 
+Feb  8 22:53:11 ubuntu kernel: [22215.211700] Got prinfo for 28248 
+Feb  8 22:53:11 ubuntu kernel: [22215.211777] Got prinfo for 28248 
+Feb  8 22:53:11 ubuntu kernel: [22215.211897] Got prinfo for 28261 
+Feb  8 22:53:11 ubuntu kernel: [22215.211928] Got prinfo for 28248 
+Feb  8 22:53:11 ubuntu kernel: [22215.211951] Got prinfo for 28262 
+Feb  8 22:53:11 ubuntu kernel: [22215.212007] Got prinfo for 28261 
+Feb  8 22:53:11 ubuntu kernel: [22215.212008] Got prinfo for 28262 
+Feb  8 22:53:11 ubuntu kernel: [22215.212127] Got prinfo for 28263 
+Feb  8 22:53:12 ubuntu kernel: [22215.212189] Got prinfo for 28263 
+Feb  8 22:53:12 ubuntu kernel: [22215.569749] Got prinfo for 28247 
+Feb  8 22:53:12 ubuntu kernel: [22215.569817] Got prinfo for 28247 
+Feb  8 22:53:12 ubuntu kernel: [22215.926496] Got prinfo for 28245 
+Feb  8 22:53:12 ubuntu kernel: [22216.320244] Got prinfo for 28249 
+

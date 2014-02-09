@@ -1,0 +1,6 @@
+sleep 10s &
+firefox &
+ps -ef
+cat shell2.c
+jobs
+exit
