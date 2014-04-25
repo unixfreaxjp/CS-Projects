@@ -1,0 +1,66 @@
+args: 10, 3, 1, 1
+Thread 4 (Male): 
+	loops = 2 
+	min = 0us 
+	max = 3us 
+	avg = 1us 
+
+Thread 1 (Male): 
+	loops = 3 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 2 (Female): 
+	loops = 1 
+	min = 15133us 
+	max = 15133us 
+	avg = 15133us 
+
+Thread 7 (Female): 
+	loops = 1 
+	min = 15065us 
+	max = 15065us 
+	avg = 15065us 
+
+Thread 0 (Female): 
+	loops = 2 
+	min = 15us 
+	max = 15134us 
+	avg = 7574us 
+
+Thread 8 (Male): 
+	loops = 4 
+	min = 0us 
+	max = 546us 
+	avg = 147us 
+
+Thread 6 (Male): 
+	loops = 5 
+	min = 0us 
+	max = 52us 
+	avg = 25us 
+
+Thread 5 (Female): 
+	loops = 3 
+	min = 23us 
+	max = 15137us 
+	avg = 5084us 
+
+Thread 3 (Female): 
+	loops = 3 
+	min = 15us 
+	max = 15133us 
+	avg = 5093us 
+
+Thread 9 (Female): 
+	loops = 4 
+	min = 1us 
+	max = 9924us 
+	avg = 2515us 
+
+Usages: 28
+Vacant time: 8645us
+Occupied time: 18193us
+Average queue: 5
+Average occupancy: 1

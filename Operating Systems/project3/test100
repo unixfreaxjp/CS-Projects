@@ -1,0 +1,606 @@
+args: 100, 20, 10, 10
+Thread 3 (Male): 
+	loops = 1 
+	min = 1us 
+	max = 1us 
+	avg = 1us 
+
+Thread 13 (Male): 
+	loops = 3 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 4 (Male): 
+	loops = 5 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 46 (Male): 
+	loops = 1 
+	min = 1us 
+	max = 1us 
+	avg = 1us 
+
+Thread 49 (Male): 
+	loops = 1 
+	min = 0us 
+	max = 0us 
+	avg = 0us 
+
+Thread 57 (Male): 
+	loops = 1 
+	min = 0us 
+	max = 0us 
+	avg = 0us 
+
+Thread 11 (Male): 
+	loops = 12 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 16 (Male): 
+	loops = 7 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 28 (Male): 
+	loops = 14 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 94 (Male): 
+	loops = 1 
+	min = 0us 
+	max = 0us 
+	avg = 0us 
+
+Thread 37 (Male): 
+	loops = 15 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 59 (Male): 
+	loops = 10 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 87 (Male): 
+	loops = 9 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 30 (Male): 
+	loops = 11 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 81 (Male): 
+	loops = 13 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 6 (Male): 
+	loops = 18 
+	min = 0us 
+	max = 2us 
+	avg = 0us 
+
+Thread 22 (Male): 
+	loops = 24 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 47 (Male): 
+	loops = 22 
+	min = 0us 
+	max = 2us 
+	avg = 0us 
+
+Thread 20 (Male): 
+	loops = 16 
+	min = 0us 
+	max = 9us 
+	avg = 0us 
+
+Thread 91 (Male): 
+	loops = 13 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 53 (Male): 
+	loops = 22 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 85 (Male): 
+	loops = 16 
+	min = 0us 
+	max = 8us 
+	avg = 0us 
+
+Thread 12 (Male): 
+	loops = 33 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 38 (Male): 
+	loops = 28 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 82 (Male): 
+	loops = 18 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 43 (Male): 
+	loops = 27 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 79 (Male): 
+	loops = 13 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 15 (Male): 
+	loops = 35 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 54 (Male): 
+	loops = 25 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 74 (Male): 
+	loops = 23 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 2 (Male): 
+	loops = 28 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 84 (Male): 
+	loops = 15 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 50 (Male): 
+	loops = 27 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 75 (Male): 
+	loops = 24 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 33 (Male): 
+	loops = 22 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 93 (Male): 
+	loops = 27 
+	min = 0us 
+	max = 2us 
+	avg = 0us 
+
+Thread 0 (Male): 
+	loops = 45 
+	min = 0us 
+	max = 13us 
+	avg = 0us 
+
+Thread 40 (Male): 
+	loops = 41 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 42 (Male): 
+	loops = 40 
+	min = 0us 
+	max = 1us 
+	avg = 0us 
+
+Thread 63 (Female): 
+	loops = 1 
+	min = 66441us 
+	max = 66441us 
+	avg = 66441us 
+
+Thread 68 (Female): 
+	loops = 1 
+	min = 66131us 
+	max = 66131us 
+	avg = 66131us 
+
+Thread 36 (Female): 
+	loops = 1 
+	min = 67402us 
+	max = 67402us 
+	avg = 67402us 
+
+Thread 70 (Female): 
+	loops = 1 
+	min = 66021us 
+	max = 66021us 
+	avg = 66021us 
+
+Thread 29 (Female): 
+	loops = 5 
+	min = 0us 
+	max = 67576us 
+	avg = 13516us 
+
+Thread 39 (Female): 
+	loops = 6 
+	min = 0us 
+	max = 67325us 
+	avg = 11221us 
+
+Thread 14 (Female): 
+	loops = 8 
+	min = 0us 
+	max = 68232us 
+	avg = 8529us 
+
+Thread 71 (Female): 
+	loops = 7 
+	min = 0us 
+	max = 65998us 
+	avg = 9430us 
+
+Thread 58 (Female): 
+	loops = 11 
+	min = 0us 
+	max = 66645us 
+	avg = 6058us 
+
+Thread 26 (Female): 
+	loops = 12 
+	min = 0us 
+	max = 67789us 
+	avg = 5649us 
+
+Thread 45 (Female): 
+	loops = 13 
+	min = 0us 
+	max = 67219us 
+	avg = 5170us 
+
+Thread 72 (Female): 
+	loops = 12 
+	min = 0us 
+	max = 65843us 
+	avg = 5486us 
+
+Thread 95 (Female): 
+	loops = 10 
+	min = 0us 
+	max = 64973us 
+	avg = 6497us 
+
+Thread 19 (Female): 
+	loops = 14 
+	min = 0us 
+	max = 67992us 
+	avg = 4856us 
+
+Thread 92 (Female): 
+	loops = 12 
+	min = 0us 
+	max = 65056us 
+	avg = 5421us 
+
+Thread 23 (Female): 
+	loops = 9 
+	min = 0us 
+	max = 67906us 
+	avg = 7545us 
+
+Thread 73 (Female): 
+	loops = 13 
+	min = 0us 
+	max = 65882us 
+	avg = 5067us 
+
+Thread 35 (Female): 
+	loops = 15 
+	min = 0us 
+	max = 67405us 
+	avg = 4493us 
+
+Thread 61 (Female): 
+	loops = 16 
+	min = 0us 
+	max = 66643us 
+	avg = 4165us 
+
+Thread 27 (Female): 
+	loops = 17 
+	min = 0us 
+	max = 67042us 
+	avg = 3943us 
+
+Thread 96 (Female): 
+	loops = 14 
+	min = 0us 
+	max = 64856us 
+	avg = 4632us 
+
+Thread 62 (Female): 
+	loops = 17 
+	min = 0us 
+	max = 66447us 
+	avg = 3908us 
+
+Thread 97 (Female): 
+	loops = 16 
+	min = 0us 
+	max = 64834us 
+	avg = 4052us 
+
+Thread 83 (Female): 
+	loops = 18 
+	min = 0us 
+	max = 65451us 
+	avg = 3636us 
+
+Thread 24 (Female): 
+	loops = 20 
+	min = 0us 
+	max = 67938us 
+	avg = 3396us 
+
+Thread 56 (Female): 
+	loops = 19 
+	min = 0us 
+	max = 66497us 
+	avg = 3499us 
+
+Thread 89 (Female): 
+	loops = 21 
+	min = 0us 
+	max = 65129us 
+	avg = 3101us 
+
+Thread 66 (Female): 
+	loops = 21 
+	min = 0us 
+	max = 66443us 
+	avg = 3163us 
+
+Thread 69 (Female): 
+	loops = 18 
+	min = 0us 
+	max = 62869us 
+	avg = 3492us 
+
+Thread 8 (Female): 
+	loops = 23 
+	min = 0us 
+	max = 68496us 
+	avg = 2978us 
+
+Thread 44 (Female): 
+	loops = 16 
+	min = 0us 
+	max = 67198us 
+	avg = 4199us 
+
+Thread 41 (Female): 
+	loops = 19 
+	min = 0us 
+	max = 67258us 
+	avg = 3539us 
+
+Thread 78 (Female): 
+	loops = 21 
+	min = 0us 
+	max = 65550us 
+	avg = 3121us 
+
+Thread 21 (Female): 
+	loops = 24 
+	min = 0us 
+	max = 67840us 
+	avg = 2826us 
+
+Thread 65 (Female): 
+	loops = 23 
+	min = 0us 
+	max = 66417us 
+	avg = 2887us 
+
+Thread 10 (Female): 
+	loops = 24 
+	min = 0us 
+	max = 68493us 
+	avg = 2853us 
+
+Thread 48 (Female): 
+	loops = 25 
+	min = 0us 
+	max = 67071us 
+	avg = 2682us 
+
+Thread 76 (Female): 
+	loops = 24 
+	min = 0us 
+	max = 65680us 
+	avg = 2736us 
+
+Thread 51 (Female): 
+	loops = 25 
+	min = 0us 
+	max = 66924us 
+	avg = 2676us 
+
+Thread 60 (Female): 
+	loops = 24 
+	min = 0us 
+	max = 66442us 
+	avg = 2768us 
+
+Thread 99 (Female): 
+	loops = 23 
+	min = 0us 
+	max = 62942us 
+	avg = 2736us 
+
+Thread 7 (Female): 
+	loops = 30 
+	min = 0us 
+	max = 68555us 
+	avg = 2285us 
+
+Thread 9 (Female): 
+	loops = 19 
+	min = 0us 
+	max = 68450us 
+	avg = 3603us 
+
+Thread 34 (Female): 
+	loops = 29 
+	min = 0us 
+	max = 66963us 
+	avg = 2309us 
+
+Thread 17 (Female): 
+	loops = 34 
+	min = 0us 
+	max = 68108us 
+	avg = 2003us 
+
+Thread 31 (Female): 
+	loops = 30 
+	min = 0us 
+	max = 67494us 
+	avg = 2249us 
+
+Thread 52 (Female): 
+	loops = 33 
+	min = 0us 
+	max = 66884us 
+	avg = 2026us 
+
+Thread 80 (Female): 
+	loops = 30 
+	min = 0us 
+	max = 65334us 
+	avg = 2177us 
+
+Thread 67 (Female): 
+	loops = 34 
+	min = 0us 
+	max = 66172us 
+	avg = 1946us 
+
+Thread 18 (Female): 
+	loops = 29 
+	min = 0us 
+	max = 68058us 
+	avg = 2346us 
+
+Thread 64 (Female): 
+	loops = 35 
+	min = 0us 
+	max = 66439us 
+	avg = 1898us 
+
+Thread 5 (Female): 
+	loops = 34 
+	min = 0us 
+	max = 68551us 
+	avg = 2016us 
+
+Thread 77 (Female): 
+	loops = 35 
+	min = 0us 
+	max = 65520us 
+	avg = 1872us 
+
+Thread 25 (Male): 
+	loops = 42 
+	min = 0us 
+	max = 117253us 
+	avg = 2791us 
+
+Thread 86 (Male): 
+	loops = 35 
+	min = 0us 
+	max = 117236us 
+	avg = 3349us 
+
+Thread 88 (Female): 
+	loops = 37 
+	min = 0us 
+	max = 65103us 
+	avg = 1864us 
+
+Thread 90 (Male): 
+	loops = 32 
+	min = 0us 
+	max = 117359us 
+	avg = 3876us 
+
+Thread 32 (Male): 
+	loops = 38 
+	min = 0us 
+	max = 117256us 
+	avg = 3156us 
+
+Thread 98 (Male): 
+	loops = 34 
+	min = 0us 
+	max = 117265us 
+	avg = 3642us 
+
+Thread 55 (Female): 
+	loops = 47 
+	min = 0us 
+	max = 66480us 
+	avg = 1575us 
+
+Thread 1 (Female): 
+	loops = 45 
+	min = 0us 
+	max = 68601us 
+	avg = 1694us 
+
+Usages: 2007
+Vacant time: 23653us
+Occupied time: 244391us
+Average queue: 19
+Average occupancy: 6

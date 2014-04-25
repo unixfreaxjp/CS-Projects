@@ -1,0 +1,3 @@
+The LKM for this file is in in Intercept_open_close.c. Lines 24 & 25 have asmlinkages to the kernel's sys_open and sys_close functions. The functions new_sys_open and new_sys_close define the new sys_open & sys_close functions. Each function gets the UID, checks if it is >= 1000, and logs using printk if needed. Then they call the original functions using the references to the original functions. I assumed that we were supposed to return the original function's return value. 
+
+I did my tests in the terminal.  The output of some of it is in output.txt. Testing was difficult since the syslog was always being flooded by Ubuntu's background processes opening and closing files, so I usually used grep to find the lines I was looking for. 

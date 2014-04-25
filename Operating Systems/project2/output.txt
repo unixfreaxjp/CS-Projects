@@ -1,0 +1,32 @@
+akshay@ubuntu:~/cs3013/project2$ sudo insmod Intercept_open_close.ko && sudo cat /var/log/syslog
+Feb  2 19:15:12 ubuntu kernel: [ 8558.602069] Interceptor: Found syscall table at address: 0xC1583020
+Feb  2 19:15:37 ubuntu kernel: [ 8558.602075] Loaded interceptor!
+Feb  2 19:15:37 ubuntu kernel: [ 8584.323598] User 1001 is opening file: /etc/fstab
+Feb  2 19:15:37 ubuntu kernel: [ 8584.323670] User 1001 is opening file: /proc/mounts
+Feb  2 19:15:37 ubuntu kernel: [ 8584.323793] User 1001 is opening file: /proc/mounts
+Feb  2 19:15:38 ubuntu kernel: [ 8584.323850] User 1001 is opening file: /proc/mounts
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817184] User 1001 is opening file: /etc/ld.so.cache
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817237] User 1001 is opening file: /lib/i386-linux-gnu/libutil.so.1
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817268] User 1001 is opening file: /lib/i386-linux-gnu/libdl.so.2
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817292] User 1001 is opening file: /lib/i386-linux-gnu/libc.so.6
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817605] User 1001 is opening file: /usr/lib/locale/locale-archive
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817708] User 1001 is opening file: /etc/nsswitch.conf
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817750] User 1001 is opening file: /etc/ld.so.cache
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817766] User 1001 is opening file: /lib/i386-linux-gnu/libnss_compat.so.2
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817789] User 1001 is opening file: /lib/i386-linux-gnu/libnsl.so.1
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817847] User 1001 is opening file: /etc/ld.so.cache
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817862] User 1001 is opening file: /lib/i386-linux-gnu/libnss_nis.so.2
+Feb  2 19:15:38 ubuntu kernel: [ 8584.817888] User 1001 is opening file: /lib/i386-linux-gnu/libnss_files.so.2
+Feb  2 20:22:17 ubuntu kernel: [12581.519436] User 1001 is closing file descriptor: 8
+Feb  2 20:22:17 ubuntu kernel: [12581.519687] User 1001 is closing file descriptor: 7
+Feb  2 20:22:17 ubuntu kernel: [12581.519944] User 1001 is closing file descriptor: 8
+Feb  2 20:22:17 ubuntu kernel: [12581.520193] User 1001 is closing file descriptor: 8
+Feb  2 20:22:17 ubuntu kernel: [12581.520705] User 1001 is closing file descriptor: 7
+Feb  2 20:22:17 ubuntu kernel: [12581.521279] User 1001 is closing file descriptor: 19
+Feb  2 20:22:17 ubuntu kernel: [12581.769764] User 1001 is closing file descriptor: 22
+Feb  2 20:22:17 ubuntu kernel: [12581.770187] User 1001 is closing file descriptor: 137
+Feb  2 20:22:17 ubuntu kernel: [12581.770582] User 1001 is closing file descriptor: 8
+Feb  2 20:22:17 ubuntu kernel: [12581.770610] User 1001 is closing file descriptor: 7
+akshay@ubuntu:~/cs3013/project2$ sudo rmmod Intercept_open_close.ko && sudo cat /var/log/syslog | grep Unloaded
+Feb  2 20:27:51 ubuntu kernel: [12905.916796] Unloaded interceptor!
+
