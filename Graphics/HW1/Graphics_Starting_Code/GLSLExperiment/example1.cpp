@@ -4,6 +4,9 @@
 #include <vector>
 #include "mat.h"
 
+using namespace std;
+
+
 const int MODE_SIERPINSKI = 0;
 const int MODE_HILBERT = 1;
 const int MODE_USA = 2;
@@ -12,6 +15,14 @@ const int MODE_VINCI = 4;
 
 //Number of Sierpinski iterations
 const int SierpinskiIterations = 50000;
+
+//direction vectors used to hilbert curve
+const vec2 directions[] = {
+	vec2(1,0),
+	vec2(0,1),
+	vec2(-1,0),
+	vec2(0,-1)
+};
 
 typedef struct polyline_struct {
 	GLuint vbo;
@@ -36,12 +47,15 @@ void displaySierpinski();
 void displayPolyline(polyline* p);
 void reshape(int W, int H);
 float* hilbert(int depth);
+string generateHilbertLang(int iteration);
+void generateHilbertCurve(int iteration);
+void displayHilbert();
+void setViewport(float l, float r, float b, float t);
 
 typedef vec2 point2;
 
-using namespace std;
 
-int mode = MODE_SIERPINSKI;
+int mode = MODE_HILBERT;
 
 int width;
 int height;
@@ -55,10 +69,12 @@ GLuint program;
 
 // Array for sierpinski gasket
 point2 sierpinski[SierpinskiIterations];
-
+vector<point2>* hilbertCurve;
 polyline dragon;
 polyline usa;
 polyline vinci;
+
+int hilbertIterations = 2;
 
 struct {
 	float left;
@@ -88,6 +104,68 @@ void generateGeometry( void )
 	loadPolyline("usa.dat", &usa);
 	loadPolyline("vinci.dat", &vinci);
 
+	generateHilbertCurve(hilbertIterations);
+
+}
+
+string generateHilbertLang(int iteration){
+	string hilbert = "L";
+	string L = "+RF-LFL-FR+";
+	string R = "-LF+RFR+FL-"; 
+	string newHilbert = "";
+	for(int i = 0; i < iteration+1; i++){
+		for(int h = 0; h < hilbert.length(); h++){
+			char symbol = hilbert[h];
+			switch(symbol){
+			case 'L':
+				newHilbert += L;
+				break;
+			case 'R':
+				newHilbert += R;
+				break;
+			default:
+				newHilbert += symbol;
+				break;
+			}
+		}
+		cout << newHilbert << endl;
+		hilbert = newHilbert;
+	}
+	cout << hilbert << endl;
+	return hilbert;
+}
+
+void generateHilbertCurve(int iteration){
+	string lang = generateHilbertLang(iteration);
+	vector<point2>* curve = new vector<point2>();
+	curve->push_back(point2(1,1));
+	int dir = 0;
+	for(int i = 0; i < lang.length(); i++){
+		char symbol = lang[i];
+
+		switch(symbol){
+		case '+':
+			dir = (dir+1)%4;
+			break;
+		case '-':
+			dir = (dir+3)%4;
+			break;
+		case 'F':
+			curve->push_back(curve->back() + directions[dir]);
+			break;
+		}
+	}
+
+	if(hilbertCurve != NULL){
+		free(hilbertCurve);
+	}
+
+	for(int i = 0; i < curve->size(); i++){
+		printf("(%f, %f) ", curve->at(i).x, curve->at(i).y);
+	}
+	cout << endl;
+
+	hilbertCurve = curve;
 }
 
 void loadPolyline(char* fileName, polyline* p){
@@ -174,7 +252,8 @@ void initGPUBuffers( void )
     glBindVertexArray( vao);
     glGenBuffers( 1, &buffer);
     glBindBuffer( GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(sierpinski), sierpinski, GL_STATIC_DRAW);
+	setViewport(0,15,0,15);
+		glBufferData(GL_ARRAY_BUFFER, hilbertCurve->size()*8, hilbertCurve->data(), GL_STATIC_DRAW);
 
 	/*glBindVertexArray( vao[1] );
     glGenBuffers( 1, &buffer);
@@ -232,6 +311,10 @@ void display(){
 		break;
 	case MODE_VINCI:
 		displayPolyline(&vinci);
+		break;
+	case MODE_HILBERT:
+		displayHilbert();
+		break;
 	}
 }
 
@@ -246,9 +329,9 @@ void displaySierpinski(){
 }
 
 void displayPolyline(polyline* p){
-	for(int h = 0; h < 2; h++){
-		for(int v = 0; v < 2; v++){
-			glViewport(viewport.vX+h*width/2, viewport.vY+v*height/2, viewport.vWidth/2, viewport.vHeight/2);
+	for(int h = 0; h < 4; h++){
+		for(int v = 0; v < 4; v++){
+			glViewport(viewport.vX+h*width/4, viewport.vY+v*height/4, viewport.vWidth/4, viewport.vHeight/4);
 			ortho = Ortho2D(p->left, p->right, p->bottom, p->top);	
 			printf("%f, %f, %f, %f\n", p->left, p->right, p->bottom, p->top);
 			glUniformMatrix4fv(projLoc, 1, GL_TRUE, ortho);
@@ -257,34 +340,27 @@ void displayPolyline(polyline* p){
 			//glBindVertexArray(p->vbo);
 			for(int i = 0; i < p->lines; i++){
 				glDrawArrays(GL_LINE_STRIP, first, p->segments[i]);
-				printf("segment(%d, %d)\n", first, p->segments[i]);
 				first += p->segments[i];
 			}
 			glFlush();
 		}
 	}
 }
-/*
-vec2* hilbert(int depth){
-	if(depth == 0){
-		vec2 orig[] = {
-			vec2(1,1),
-			vec2(1,2),
-			vec2(2,1),
-			vec2(1,2),
-		};
 
-		return &orig[0];
-	} else {
-		vec2* prev = hilbert(depth-1);
-		int size = pow((double)4, depth+1);
-		vec2* p = new vec2[size];
-		int h = pow((double)2, depth);
-		for(int i = 0; i < size/4; i++){
-			p[i] = prev[size/4 - i]
-		}
+void displayHilbert(){
+	glViewport(viewport.vX,viewport.vY,viewport.vWidth, viewport.vHeight);
+	float size = pow((double)2, hilbertIterations);
+	ortho = Ortho2D(0,size,0,size);
+	
+	glUniformMatrix4fv(projLoc, 1, GL_TRUE, ortho);
+	//glBindBuffer(GL_ARRAY_BUFFER,sierpinskiVbo);
+	int vertices = pow((double)4, hilbertIterations+1);
+	cout << "vertices " << vertices << endl;
+	glDrawArrays(GL_LINE_STRIP, 0, vertices);
+	glFlush();
+}
 
-	*/
+
 
 void setViewport(float l, float r, float b, float t){
 	viewport.left =l;
@@ -322,14 +398,19 @@ void keyboard( unsigned char key, int x, int y )
 		setViewport(vinci.left, vinci.right, vinci.bottom, vinci.top);
 		glBufferData(GL_ARRAY_BUFFER, vinci.size, vinci.data, GL_STATIC_DRAW);
 		break;
-    }
+	case 'h':
+		mode = MODE_HILBERT;
+		float size = pow((double)2, hilbertIterations);
+		setViewport(0,size+1,0,size+1);
+		glBufferData(GL_ARRAY_BUFFER, hilbertCurve->size()*8, hilbertCurve->data(), GL_STATIC_DRAW);
+    	break;
+	}
 
 	reshape(width, height);
 	display();
 }
 
 void reshape(int W, int H){
-	cout << "reshape" << endl;
 	width = W;
 	height = H;
 
@@ -358,8 +439,8 @@ int main( int argc, char **argv )
 {
 	// main function: program starts here
 
-	width = 1920;
-	height = 1080;
+	width = 640;
+	height = 480;
 
     glutInit( &argc, argv );                       // intialize GLUT  
     glutInitDisplayMode( GLUT_SINGLE | GLUT_RGB ); // single framebuffer, colors in RGB
