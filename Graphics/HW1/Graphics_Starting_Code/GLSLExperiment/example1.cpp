@@ -60,12 +60,16 @@ int mode = MODE_HILBERT;
 int width;
 int height;
 
+GLuint defaultVao;
+GLuint hilbertVao;
+
 mat4 ortho;
 GLuint projLoc;
 
-GLuint sierpinskiVbo;
+//GLuint sierpinskiVbo;
 // Array for polyline
 GLuint program;
+GLuint hilbertProgram;
 
 // Array for sierpinski gasket
 point2 sierpinski[SierpinskiIterations];
@@ -74,7 +78,7 @@ polyline dragon;
 polyline usa;
 polyline vinci;
 
-int hilbertIterations = 2;
+int hilbertIterations = 1;
 
 struct {
 	float left;
@@ -89,6 +93,7 @@ struct {
 
 void generateGeometry( void )
 {
+	//generate sierpinksi's gasket
 	sierpinski[0] = point2(-0.5, -0.5);
 	sierpinski[1] = point2(0.0, 0.5);
 	sierpinski[2] = point2(0.5, -0.5);
@@ -100,6 +105,7 @@ void generateGeometry( void )
 		sierpinski[i] = (sierpinski[index]+sierpinski[i-1])/2;
 	}
 
+	//load polyline files
 	loadPolyline("dragon.dat", &dragon);
 	loadPolyline("usa.dat", &usa);
 	loadPolyline("vinci.dat", &vinci);
@@ -108,34 +114,50 @@ void generateGeometry( void )
 
 }
 
+//creates the notation for the curve at the given iteration
 string generateHilbertLang(int iteration){
 	string hilbert = "L";
 	string L = "+RF-LFL-FR+";
 	string R = "-LF+RFR+FL-"; 
 	string newHilbert = "";
-	for(int i = 0; i < iteration+1; i++){
+	for(int i = 0; i < iteration; i++){
 		for(int h = 0; h < hilbert.length(); h++){
 			char symbol = hilbert[h];
-			switch(symbol){
-			case 'L':
+
+			if(symbol == 'L'){
 				newHilbert += L;
-				break;
-			case 'R':
+			} else if (symbol == 'R'){
 				newHilbert += R;
-				break;
-			default:
+			} else {
 				newHilbert += symbol;
-				break;
 			}
 		}
-		cout << newHilbert << endl;
+
 		hilbert = newHilbert;
+		newHilbert = "";
 	}
-	cout << hilbert << endl;
+
+	//cout << hilbert << endl;
+
+	newHilbert = hilbert;
+
+	hilbert = "";
+	for(int i = 0; i < newHilbert.length(); i++){
+		char s = newHilbert[i];
+		if(s != 'R' && s != 'L'){
+			hilbert += s;
+		}
+
+	}
+
+	//cout << hilbert << endl;
+
 	return hilbert;
 }
 
+//generates a hilbert curve at the given iteration
 void generateHilbertCurve(int iteration){
+	//get the notation to use as 'instructions'
 	string lang = generateHilbertLang(iteration);
 	vector<point2>* curve = new vector<point2>();
 	curve->push_back(point2(1,1));
@@ -159,15 +181,86 @@ void generateHilbertCurve(int iteration){
 	if(hilbertCurve != NULL){
 		free(hilbertCurve);
 	}
-
+	/*	
 	for(int i = 0; i < curve->size(); i++){
-		printf("(%f, %f) ", curve->at(i).x, curve->at(i).y);
+		printf("(%d, %d) ", (int)curve->at(i).x, (int)curve->at(i).y);
 	}
-	cout << endl;
+	cout << endl;*/
+
+	/**************************/
+	/*
+	vec4 colors[] = {
+		vec4(1,0,0,1),
+		vec4(0,1,0,1),
+		vec4(0,0,1,1),
+		vec4(1,1,1,1),
+	};
+
+	int colorIndices[] = {
+		0,1,2,3,
+		0,1,2,3,
+		3,2,1,0,
+		3,2,1,0,
+	};
+
+	int colorIndexIndex = 0;
+
+	point2* colorPoints;
+	vec4* hColors;
+	colorPoints = new point2[curve->size()*4];
+	hColors = new vec4[curve->size()*4];
+	//XYRGB
+	for(int i = 0; i < curve->size(); i++){
+		
+		colorPoints[i*4 + 0] = curve->at(i) + point2(-0.5,  0.5);
+		colorPoints[i*4 + 1] = curve->at(i) + point2(-0.5, -0.5);
+		colorPoints[i*4 + 2] = curve->at(i) + point2( 0.5, -0.5);
+		colorPoints[i*4 + 3] = curve->at(i) + point2( 0.5,  0.5);
+		
+		hColors[i*4 + 0] = colors[colorIndices[colorIndexIndex]];
+		hColors[i*4 + 1] = colors[colorIndices[colorIndexIndex]];
+		hColors[i*4 + 2] = colors[colorIndices[colorIndexIndex]];
+		hColors[i*4 + 3] = colors[colorIndices[colorIndexIndex]];
+
+		colorIndexIndex = (colorIndexIndex+1)%16;
+
+	}
+	cout << "alive1" << endl;
+
+	
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	//create buffers
+	GLuint hilbertColorProgram = InitShader("vshader2.glsl", "fshader2.glsl"); 
+	glUseProgram(hilbertColorProgram);
+	
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, curve->size()*4*6*4, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, curve->size()*4*2*4, colorPoints);
+	glBufferSubData(GL_ARRAY_BUFFER, curve->size()*4*2*4, curve->size()*4*4*4, hColors);
+
+	GLuint vPosition = glGetAttribLocation(hilbertColorProgram, "vPosition");
+	glEnableVertexAttribArray(vPosition);
+	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+	GLuint vColor = glGetAttribLocation(hilbertColorProgram, "vColor");
+	glEnableVertexAttribArray(vColor);
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+
+	hilbertVao = vao;
+	hilbertProgram = hilbertColorProgram;
+
+	*/
+	
+	/***************************/
 
 	hilbertCurve = curve;
 }
 
+//loads a polyline file and stores the data in a given struct
 void loadPolyline(char* fileName, polyline* p){
 	char* text = textFileRead(fileName);
 
@@ -199,6 +292,7 @@ void loadPolyline(char* fileName, polyline* p){
 	//read polylines
 	p->segments = new int[lines];
 	float val;
+	float minX = 100;
 	//cout << lines << endl;
 	vector<float>* linePoints = new vector<float>();
 	for(int s = 0; s < lines; s++){
@@ -209,6 +303,7 @@ void loadPolyline(char* fileName, polyline* p){
 		for(int l = 0; l < len; l++){
 
 			ss >> val;
+			minX = (val < minX)?val:minX;
 			//cout << " " << val;
 			linePoints->push_back(val);
 			ss >> val;
@@ -217,32 +312,15 @@ void loadPolyline(char* fileName, polyline* p){
 		}
 	}
 
+	cout << fileName << " minX = " << minX << endl;
+
 	p->size = linePoints->size()*4;
 	p->data = linePoints->data();
-
-	//make GPU Buffer
-/*	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	cout << "vao " << vao << endl;
-	glBindVertexArray(vao);
-	p->vao = vao;
-	dragonVao = vao;
-	sierpinskiVao = vao;
-	cout << "vao2 " << p->vao << endl;
-	GLuint buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	cout << linePoints->size() << endl;
-	glBufferData(GL_ARRAY_BUFFER, linePoints->size()*4,linePoints->data(), GL_STATIC_DRAW);
-	*/
-//	p->buffer = buffer;
-	
 }
 
 
 void initGPUBuffers( void )
 {
-	
     GLuint buffer;
 
 	// Create a vertex array object
@@ -252,29 +330,10 @@ void initGPUBuffers( void )
     glBindVertexArray( vao);
     glGenBuffers( 1, &buffer);
     glBindBuffer( GL_ARRAY_BUFFER, buffer);
-	setViewport(0,15,0,15);
-		glBufferData(GL_ARRAY_BUFFER, hilbertCurve->size()*8, hilbertCurve->data(), GL_STATIC_DRAW);
+	//setViewport(0,15,0,15);
+	glBufferData(GL_ARRAY_BUFFER, hilbertCurve->size()*8, hilbertCurve->data(), GL_STATIC_DRAW);
 
-	/*glBindVertexArray( vao[1] );
-    glGenBuffers( 1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, dragon.size, dragon.data, GL_STATIC_DRAW);
-	
-	glBindVertexArray( vao[2] );
-    glGenBuffers( 1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, usa.size, usa.data, GL_STATIC_DRAW);
-
-	glBindVertexArray( vao[3] );
-    glGenBuffers( 1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, vinci.size, vinci.data, GL_STATIC_DRAW);
-
-	sierpinskiVbo = vao[0];
-	dragon.vbo = vao[1];
-	usa.vbo = vao[2];
-	vinci.vbo = vao[3];*/
-
+	defaultVao = vao;
 }
 
 
@@ -295,7 +354,7 @@ void shaderSetup( void )
     glClearColor( 1.0, 1.0, 1.0, 1.0 );        // sets white as color used to clear screen
 }
 
-
+//main display function that routes to the correct drawing function
 void display(){
 	
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -318,7 +377,10 @@ void display(){
 	}
 }
 
+//draw the sierpinski's gasket
 void displaySierpinski(){
+	glBindVertexArray(defaultVao);
+	glUseProgram(program);
 	glViewport(viewport.vX,viewport.vY,viewport.vWidth, viewport.vHeight);
 	ortho = Ortho2D(-1,1,-1,1);
 	
@@ -328,10 +390,13 @@ void displaySierpinski(){
 	glFlush();
 }
 
+//displays the given polyline for the struct
 void displayPolyline(polyline* p){
+	glBindVertexArray(defaultVao);
+	glUseProgram(program);
 	for(int h = 0; h < 4; h++){
 		for(int v = 0; v < 4; v++){
-			glViewport(viewport.vX+h*width/4, viewport.vY+v*height/4, viewport.vWidth/4, viewport.vHeight/4);
+			glViewport(viewport.vX+h*viewport.vWidth/4, viewport.vY+v*viewport.vHeight/4, viewport.vWidth/4, viewport.vHeight/4);
 			ortho = Ortho2D(p->left, p->right, p->bottom, p->top);	
 			printf("%f, %f, %f, %f\n", p->left, p->right, p->bottom, p->top);
 			glUniformMatrix4fv(projLoc, 1, GL_TRUE, ortho);
@@ -347,31 +412,47 @@ void displayPolyline(polyline* p){
 	}
 }
 
+//draws the hilbert curve
 void displayHilbert(){
+	
+	int vertices = pow((double)4, hilbertIterations);
+	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(viewport.vX,viewport.vY,viewport.vWidth, viewport.vHeight);
+
+	//glBindVertexArray(hilbertVao);
+	//glUseProgram(hilbertProgram);
+	//glDrawArrays(GL_QUADS, 0, vertices);
+
+	glBindVertexArray(defaultVao);
+	glUseProgram(program);
 	float size = pow((double)2, hilbertIterations);
-	ortho = Ortho2D(0,size,0,size);
+	ortho = Ortho2D(0.5,size+0.5,0.5,size+0.5);
 	
 	glUniformMatrix4fv(projLoc, 1, GL_TRUE, ortho);
 	//glBindBuffer(GL_ARRAY_BUFFER,sierpinskiVbo);
-	int vertices = pow((double)4, hilbertIterations+1);
-	cout << "vertices " << vertices << endl;
+	printf("verts = %d\n", vertices);
 	glDrawArrays(GL_LINE_STRIP, 0, vertices);
 	glFlush();
 }
 
 
-
+//used to save the current drawing's preferred viewport
 void setViewport(float l, float r, float b, float t){
+	printf("setViewport(%02f, %02f, %02f, %02f)\n", l, r, b, t);
 	viewport.left =l;
 	viewport.right =r;
 	viewport.bottom =b;
 	viewport.top =t;
 }
 
+//handles key events
 void keyboard( unsigned char key, int x, int y )
 {
 	// keyboard handler
+
+	bool showHilbert = false;
+
+	glBindVertexArray(defaultVao);
 
     switch ( key ) {
     case 033:			// 033 is Escape key octal value
@@ -398,18 +479,40 @@ void keyboard( unsigned char key, int x, int y )
 		setViewport(vinci.left, vinci.right, vinci.bottom, vinci.top);
 		glBufferData(GL_ARRAY_BUFFER, vinci.size, vinci.data, GL_STATIC_DRAW);
 		break;
+	case 'i':
+		cout << "increase hilbert" << endl;
+		hilbertIterations++;
+		showHilbert = true;
+		break;
+	case 'r':
+		cout << "decrease hilbert" << endl;
+		if(hilbertIterations > 1){
+			hilbertIterations--;
+		}
+		showHilbert = true;
+		break;
 	case 'h':
+		showHilbert = true;
+    	break;
+	}
+
+	if(showHilbert){
+			cout << "display hilbert" << endl;
+		generateHilbertCurve(hilbertIterations);
 		mode = MODE_HILBERT;
 		float size = pow((double)2, hilbertIterations);
-		setViewport(0,size+1,0,size+1);
+		setViewport(0.5,size+0.5,0.5,size+0.5);
+		
+		glBindVertexArray(defaultVao);
 		glBufferData(GL_ARRAY_BUFFER, hilbertCurve->size()*8, hilbertCurve->data(), GL_STATIC_DRAW);
-    	break;
 	}
 
 	reshape(width, height);
 	display();
 }
 
+//reshape function
+//generates ands saves a 'suggested' viewport for the drawing functions
 void reshape(int W, int H){
 	width = W;
 	height = H;
@@ -434,7 +537,7 @@ void reshape(int W, int H){
 	}
 }
 
-
+//main
 int main( int argc, char **argv )
 {
 	// main function: program starts here
