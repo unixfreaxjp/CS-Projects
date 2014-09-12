@@ -63,6 +63,8 @@ int height;
 GLuint defaultVao;
 GLuint hilbertVao;
 
+GLuint defaultBuffer;
+
 mat4 ortho;
 GLuint projLoc;
 
@@ -188,7 +190,7 @@ void generateHilbertCurve(int iteration){
 	cout << endl;*/
 
 	/**************************/
-	/*
+	
 	vec4 colors[] = {
 		vec4(1,0,0,1),
 		vec4(0,1,0,1),
@@ -239,21 +241,32 @@ void generateHilbertCurve(int iteration){
 	GLuint buffer;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, curve->size()*4*6*4, NULL, GL_STATIC_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, curve->size()*4*2*4, colorPoints);
-	glBufferSubData(GL_ARRAY_BUFFER, curve->size()*4*2*4, curve->size()*4*4*4, hColors);
+	float test[] = {
+		0,0,
+		3,0,
+		3,3,
+		0,3,
+		1,0,0,1,
+		0,1,0,1,
+		0,0,1,1,
+		1,1,0,1
+	};
+	glBufferData(GL_ARRAY_BUFFER,sizeof(test), test, GL_STATIC_DRAW);
+	///glBufferData(GL_ARRAY_BUFFER, curve->size()*4*6*4, NULL, GL_STATIC_DRAW);
+	///glBufferSubData(GL_ARRAY_BUFFER, 0, curve->size()*4*2*4, colorPoints);
+	///glBufferSubData(GL_ARRAY_BUFFER, curve->size()*4*2*4, curve->size()*4*4*4, hColors);
 
 	GLuint vPosition = glGetAttribLocation(hilbertColorProgram, "vPosition");
 	glEnableVertexAttribArray(vPosition);
 	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	GLuint vColor = glGetAttribLocation(hilbertColorProgram, "vColor");
 	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(8*4));
 
 	hilbertVao = vao;
 	hilbertProgram = hilbertColorProgram;
 
-	*/
+	
 	
 	/***************************/
 
@@ -334,6 +347,7 @@ void initGPUBuffers( void )
 	glBufferData(GL_ARRAY_BUFFER, hilbertCurve->size()*8, hilbertCurve->data(), GL_STATIC_DRAW);
 
 	defaultVao = vao;
+	defaultBuffer = buffer;
 }
 
 
@@ -345,7 +359,10 @@ void shaderSetup( void )
 
     // Initialize the vertex position attribute from the vertex shader
     GLuint loc = glGetAttribLocation( program, "vPosition" );
-    glEnableVertexAttribArray( loc );
+	glBindVertexArray(defaultVao);
+	glBindBuffer(GL_ARRAY_BUFFER, defaultBuffer);
+	glEnableVertexAttribArray( loc );
+	
     glVertexAttribPointer( loc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
 
 	projLoc = glGetUniformLocation(program, "Proj");
@@ -419,11 +436,12 @@ void displayHilbert(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glViewport(viewport.vX,viewport.vY,viewport.vWidth, viewport.vHeight);
 
-	//glBindVertexArray(hilbertVao);
-	//glUseProgram(hilbertProgram);
-	//glDrawArrays(GL_QUADS, 0, vertices);
+	glBindVertexArray(hilbertVao);
+	glUseProgram(hilbertProgram);
+	glDrawArrays(GL_QUADS, 0, vertices*4);
 
 	glBindVertexArray(defaultVao);
+	glBindBuffer(GL_ARRAY_BUFFER, defaultBuffer);
 	glUseProgram(program);
 	float size = pow((double)2, hilbertIterations);
 	ortho = Ortho2D(0.5,size+0.5,0.5,size+0.5);
@@ -504,6 +522,7 @@ void keyboard( unsigned char key, int x, int y )
 		setViewport(0.5,size+0.5,0.5,size+0.5);
 		
 		glBindVertexArray(defaultVao);
+		glBindBuffer(GL_ARRAY_BUFFER, defaultBuffer);
 		glBufferData(GL_ARRAY_BUFFER, hilbertCurve->size()*8, hilbertCurve->data(), GL_STATIC_DRAW);
 	}
 
