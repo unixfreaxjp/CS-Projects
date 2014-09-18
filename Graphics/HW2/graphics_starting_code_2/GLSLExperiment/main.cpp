@@ -167,7 +167,7 @@ void display( void )
 	glBindVertexArray(models[cur]->vao);
 
 	modelView.pushMatrix();
-	modelView.rotateY(rotation*-1);
+	modelView.rotateY(rotation*rotateDirection);
 	modelView.translate(translation);
 
 	glUniformMatrix4fv( modelMatrix, 1, GL_FALSE, Angel::transpose(modelView.model) );
