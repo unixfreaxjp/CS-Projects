@@ -78,19 +78,28 @@
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalDependencies>freeglut.lib;glew32.lib;glew32s.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\glew\lib;..\freeglut\lib;</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="example1.cpp" />
+    <ClCompile Include="CTM.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="InitShader.cpp" />
+    <ClCompile Include="PlyModel.cpp" />
     <ClCompile Include="textfile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Angel.h" />
     <ClInclude Include="CheckError.h" />
+    <ClInclude Include="CTM.h" />
     <ClInclude Include="mat.h" />
+    <ClInclude Include="PlyModel.h" />
     <ClInclude Include="textfile.h" />
     <ClInclude Include="vec.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fshader1.glsl" />
+    <None Include="vshader1.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
