@@ -1,17 +1,47 @@
-﻿Build started 9/12/2014 7:55:15 PM.
-     1>Project "Z:\Akshay\git\CS-Projects\Graphics\HW1\Graphics_Starting_Code\GLSLExperiment\GLSLExperiment.vcxproj" on node 2 (build target(s)).
+﻿Build started 9/18/2014 5:00:25 PM.
+     1>Project "R:\Graphics_Starting_Code\GLSLExperiment\GLSLExperiment.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GLSLExperiment.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         All outputs are up-to-date.
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\glew\lib /I..\glew\include /I..\freeglut\include\GL /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt example1.cpp InitShader.cpp textfile.cpp
+         textfile.cpp
+         InitShader.cpp
+         example1.cpp
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(126): warning C4018: '<' : signed/unsigned mismatch
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(147): warning C4018: '<' : signed/unsigned mismatch
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(167): warning C4018: '<' : signed/unsigned mismatch
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(195): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(195): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(196): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(196): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(197): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(197): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(215): warning C4018: '<' : signed/unsigned mismatch
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(427): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(428): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(429): warning C4244: 'argument' : conversion from 'double' to 'const GLfloat', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(429): warning C4244: 'argument' : conversion from 'double' to 'const GLfloat', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(515): warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(516): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(516): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(536): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(539): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(542): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>r:\graphics_starting_code\glslexperiment\example1.cpp(543): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Generating Code...
        Link:
-         All outputs are up-to-date.
-         GLSLExperiment.vcxproj -> Z:\Akshay\git\CS-Projects\Graphics\HW1\Graphics_Starting_Code\Debug\GLSLExperiment.exe
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"R:\Graphics_Starting_Code\Debug\GLSLExperiment.exe" /NOLOGO /LIBPATH:..\glew\lib /LIBPATH:..\freeglut\lib freeglut.lib glew32.lib glew32s.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GLSLExperiment.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"R:\Graphics_Starting_Code\Debug\GLSLExperiment.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"R:\Graphics_Starting_Code\Debug\GLSLExperiment.lib" /MACHINE:X86 Debug\example1.obj
+         Debug\InitShader.obj
+         Debug\textfile.obj
+         LINK : R:\Graphics_Starting_Code\Debug\GLSLExperiment.exe not found or not built by the last incremental link; performing full link
+         GLSLExperiment.vcxproj -> R:\Graphics_Starting_Code\Debug\GLSLExperiment.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"R:\Graphics_Starting_Code\Debug\GLSLExperiment.exe;#1" /manifest Debug\GLSLExperiment.exe.intermediate.manifest
        FinalizeBuildStatus:
          Deleting file "Debug\GLSLExperiment.unsuccessfulbuild".
          Touching "Debug\GLSLExperiment.lastbuildstate".
-     1>Done Building Project "Z:\Akshay\git\CS-Projects\Graphics\HW1\Graphics_Starting_Code\GLSLExperiment\GLSLExperiment.vcxproj" (build target(s)).
+     1>Done Building Project "R:\Graphics_Starting_Code\GLSLExperiment\GLSLExperiment.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.07
+Time Elapsed 00:00:06.15

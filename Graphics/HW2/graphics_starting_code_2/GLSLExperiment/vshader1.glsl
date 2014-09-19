@@ -36,7 +36,7 @@ void main()
 		0.0, 1.0, 0.0, 0.0,
 		-s, 0.0, c, 0.0,
 		0.0, 0.0, 0.0, 1.0
-  );
+  ); 
 
   gl_Position = projection_matrix*shearX*twist*model_matrix*vPosition;
   interpolatedColor = vColor;

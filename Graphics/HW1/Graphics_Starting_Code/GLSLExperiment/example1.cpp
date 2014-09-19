@@ -67,7 +67,7 @@ GLuint defaultBuffer;
 
 mat4 ortho;
 GLuint projLoc;
-
+GLuint projLocHilbert;
 //GLuint sierpinskiVbo;
 // Array for polyline
 GLuint program;
@@ -80,7 +80,7 @@ polyline dragon;
 polyline usa;
 polyline vinci;
 
-int hilbertIterations = 1;
+int hilbertIterations = 4;
 
 struct {
 	float left;
@@ -192,10 +192,10 @@ void generateHilbertCurve(int iteration){
 	/**************************/
 	
 	vec4 colors[] = {
-		vec4(1,0,0,1),
-		vec4(0,1,0,1),
-		vec4(0,0,1,1),
-		vec4(1,1,1,1),
+		vec4(1,0.3,0.3,1),//r
+		vec4(0.3,1,0.3,1),//g
+		vec4(0.3,0.3,1,1),//b
+		vec4(1,1,1,1),//w
 	};
 
 	int colorIndices[] = {
@@ -238,30 +238,23 @@ void generateHilbertCurve(int iteration){
 	GLuint hilbertColorProgram = InitShader("vshader2.glsl", "fshader2.glsl"); 
 	glUseProgram(hilbertColorProgram);
 	
+	projLocHilbert = glGetUniformLocation(hilbertColorProgram, "Proj");
+
 	GLuint buffer;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	float test[] = {
-		0,0,
-		3,0,
-		3,3,
-		0,3,
-		1,0,0,1,
-		0,1,0,1,
-		0,0,1,1,
-		1,1,0,1
-	};
-	glBufferData(GL_ARRAY_BUFFER,sizeof(test), test, GL_STATIC_DRAW);
-	///glBufferData(GL_ARRAY_BUFFER, curve->size()*4*6*4, NULL, GL_STATIC_DRAW);
-	///glBufferSubData(GL_ARRAY_BUFFER, 0, curve->size()*4*2*4, colorPoints);
-	///glBufferSubData(GL_ARRAY_BUFFER, curve->size()*4*2*4, curve->size()*4*4*4, hColors);
+
+	//glBufferData(GL_ARRAY_BUFFER,sizeof(test), test, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, curve->size()*4*6*4, NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, curve->size()*4*2*4, colorPoints);
+	glBufferSubData(GL_ARRAY_BUFFER, curve->size()*4*2*4, curve->size()*4*4*4, hColors);
 
 	GLuint vPosition = glGetAttribLocation(hilbertColorProgram, "vPosition");
 	glEnableVertexAttribArray(vPosition);
 	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	GLuint vColor = glGetAttribLocation(hilbertColorProgram, "vColor");
 	glEnableVertexAttribArray(vColor);
-	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(8*4));
+	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(curve->size()*4*2*4));
 
 	hilbertVao = vao;
 	hilbertProgram = hilbertColorProgram;
@@ -269,7 +262,6 @@ void generateHilbertCurve(int iteration){
 	
 	
 	/***************************/
-
 	hilbertCurve = curve;
 }
 
@@ -433,18 +425,20 @@ void displayPolyline(polyline* p){
 void displayHilbert(){
 	
 	int vertices = pow((double)4, hilbertIterations);
-	glClear(GL_COLOR_BUFFER_BIT);
+		float size = pow((double)2, hilbertIterations);
+	ortho = Ortho2D(0.5,size+0.5,0.5,size+0.5);
 	glViewport(viewport.vX,viewport.vY,viewport.vWidth, viewport.vHeight);
 
 	glBindVertexArray(hilbertVao);
 	glUseProgram(hilbertProgram);
+	
+	glUniformMatrix4fv(projLocHilbert, 1, GL_TRUE, ortho);
 	glDrawArrays(GL_QUADS, 0, vertices*4);
 
 	glBindVertexArray(defaultVao);
 	glBindBuffer(GL_ARRAY_BUFFER, defaultBuffer);
 	glUseProgram(program);
-	float size = pow((double)2, hilbertIterations);
-	ortho = Ortho2D(0.5,size+0.5,0.5,size+0.5);
+
 	
 	glUniformMatrix4fv(projLoc, 1, GL_TRUE, ortho);
 	//glBindBuffer(GL_ARRAY_BUFFER,sierpinskiVbo);

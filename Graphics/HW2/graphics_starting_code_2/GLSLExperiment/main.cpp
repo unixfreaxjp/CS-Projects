@@ -5,7 +5,9 @@
 #include <sstream>
 #include "CTM.h"
 #include <random>
+#include <iostream>;
 #include <time.h>
+#include "textfile.h"
 //----------------------------------------------------------------------------
 
 using namespace std;
@@ -180,7 +182,7 @@ void display( void )
 
 	glEnable( GL_DEPTH_TEST );
 
-	glDrawArrays(GL_TRIANGLES, 0, models[cur]->vertexCount);
+	glDrawArrays(GL_LINES, 0, models[cur]->vertexCount);
 
 	glDisable( GL_DEPTH_TEST ); 
 
@@ -228,6 +230,7 @@ void keyboard( unsigned char key, int x, int y )
 	case 'W':
 		translation = vec4(0,0,0,1);
 		dTranslation = vec4(0,0,0,0);
+		rotation = 0.0f;
 		break;
 	case 'X':
 		if(dTranslation.x > 0.0f){
@@ -334,6 +337,8 @@ void idle(){
 // entry point
 int main( int argc, char **argv )
 {
+	string src = textFileRead("vshader1.glsl");
+	cout << src << "|" << std::endl;
 	srand(time(NULL));
 	// init glut
     glutInit( &argc, argv );

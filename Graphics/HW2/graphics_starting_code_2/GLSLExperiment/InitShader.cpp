@@ -53,20 +53,20 @@ namespace Angel {
 static char*
 readShaderSource(const char* shaderFile)
 {
-    FILE* fp = fopen(shaderFile, "r");
+    FILE* fp = fopen(shaderFile, "rt");
 
     if ( fp == NULL ) { return NULL; }
 
-    fseek(fp, 0L, SEEK_END);
-    long size = ftell(fp);
-
-    fseek(fp, 0L, SEEK_SET);
+    fseek(fp, 0, SEEK_END);
+    int size = ftell(fp);
+	rewind(fp);
+    //fseek(fp, 0L, SEEK_SET);
     char* buf = new char[size + 1];
-    fread(buf, 1, size, fp);
+    size = fread(buf, sizeof(char), size, fp);
 
     buf[size] = '\0';
     fclose(fp);
-
+	std::cout << buf << "|" << std::endl;
     return buf;
 }
 
