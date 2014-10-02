@@ -8,6 +8,7 @@ class CTM {
 public:
 	mat4 model;
 	vector<mat4>* stack;
+	GLuint loc;
 	CTM(void);
 	~CTM(void);
 	void pushMatrix();
@@ -21,4 +22,5 @@ public:
 	void scale(float x, float y, float z);
 	void scale(float s);
 	void shearX(float h);
+	void apply();
 };

@@ -27,7 +27,7 @@ void resize(int w, int h);
 void idle();
 void drawPly(PlyModel* model);
 void drawIFS(Grammer* g);
-
+void color(float r, float g, float b, float a);
 
 
 typedef Angel::vec4  color4;
@@ -44,6 +44,7 @@ GLuint vColor;
 GLuint vUseColor;
 GLuint vShear;
 GLuint vTwist;
+GLuint uColor;
 
 CTM modelView;
 mat4 proj;
@@ -69,8 +70,11 @@ void init(void)
 	vUseColor = glGetUniformLocationARB(program, "useColor");
 	vShear = glGetUniformLocationARB(program, "shear");
 	vTwist = glGetUniformLocationARB(program, "twist");
-
+	uColor = glGetUniformLocationARB(program, "color");
 	// sets the default color to clear screen
+
+	modelView.loc = modelMatrix;
+
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // black background
 	//draw lines
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -120,24 +124,20 @@ void display( void )
 	
 	//glBindVertexArray(models[cur]->vao);
 
-	
 	glUniformMatrix4fv( modelMatrix, 1, GL_FALSE, Angel::transpose(modelView.model) );
 	glUniformMatrix4fv( viewMatrix, 1, GL_FALSE, Angel::transpose(proj));
 	glUniform1i(vUseColor, useColor);
 	glUniform1f(vShear, shear);	
 	glUniform1f(vTwist, twist);
 	
-
-	glEnable( GL_DEPTH_TEST );
-
-	//drawPly(cylinder);
+	color(0.3,0.7,0.3,1);
+	/*drawPly(cylinder);
+	modelView.pushMatrix();
+	modelView.translate(0,0,1);
+	drawPly(sphere);
+	modelView.popMatrix();*/
 	drawIFS(trees['a']);
-	//glDrawArrays(GL_LINES, 0, models[cur]->vertexCount);
-
-	glDisable( GL_DEPTH_TEST ); 
-
-
-    glFlush(); // force output to graphics hardware
+	glFlush(); // force output to graphics hardware
 
 	// use this call to double buffer
 	glutSwapBuffers();
@@ -150,16 +150,21 @@ void drawPly(PlyModel* model){
 	modelView.pushMatrix();
 	modelView.translate(-model->center);
 	modelView.scale(model->scaleFactor);
-	glUniformMatrix4fv( modelMatrix, 1, GL_FALSE, Angel::transpose(modelView.model) );
-	modelView.popMatrix();
+	//glUniformMatrix4fv( modelMatrix, 1, GL_FALSE, Angel::transpose(modelView.model) );
 	
-	glDrawArrays(GL_LINES, 0, model->vertexCount);
-
+	
+	glDrawArrays(GL_TRIANGLES, 0, model->vertexCount);
+	modelView.popMatrix();
 
 	glDisable( GL_DEPTH_TEST );
 }
 
+void color(float r, float g, float b, float a){
+	glUniform4fv(uColor, 1, vec4(r,g,b,a));
+}
+
 void drawIFS(Grammer* g){
+	vec4 turtle = (0,0,0,1);
 	modelView.pushMatrix();
 	for(int i = 0; i < g->pattern.length(); i++){
 		char c = g->pattern[i];
@@ -175,31 +180,33 @@ void drawIFS(Grammer* g){
 			modelView.translate(0,0,g->len);
 			break;
 		case '+':
-			modelView.rotateX(g->rot.x);
+			turtle.x += g->rot.x;
+			//modelView.rotateX(g->rot.x);
 			break;
 		case '-':
-			modelView.rotateX(-g->rot.x);
+			turtle.x -= g->rot.y;
+			//modelView.rotateX(-g->rot.x);
 			break;
 		case '&':
-			modelView.rotateY(g->rot.y);
+			//modelView.rotateY(g->rot.y);
 			break;
 		case '^':
-			modelView.rotateY(-g->rot.y);
+			//modelView.rotateY(-g->rot.y);
 			break;
 		case '\\':
-			modelView.rotateZ(g->rot.z);
+			//modelView.rotateZ(g->rot.z);
 			break;
 		case '/':
-			modelView.rotateZ(-g->rot.z);
+			//modelView.rotateZ(-g->rot.z);
 			break;
 		case '|':
-			modelView.rotateX(180);
+			//modelView.rotateX(180);
 			break;
 		case '[':
-			modelView.pushMatrix();
+			//modelView.pushMatrix();
 			break;
 		case ']':
-			modelView.popMatrix();
+			//modelView.popMatrix();
 			break;
 		}
 	}

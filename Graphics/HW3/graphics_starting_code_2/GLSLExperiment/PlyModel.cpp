@@ -66,8 +66,8 @@ PlyModel* loadPly(string fileName){
 				ss >> indices[f*3 + 2];
 			}
 
-			vec4* geometry = new vec4[faceCount*6];
-			vec4* colors = new vec4[faceCount*6];
+			vec4* geometry = new vec4[faceCount*3];
+			vec4* colors = new vec4[faceCount*3];
 
 			vec4 color[] = {
 				vec4(1.0, 0.0, 0.0, 1.0),//red
@@ -81,30 +81,22 @@ PlyModel* loadPly(string fileName){
 			};
 
 			for(int f = 0; f < faceCount; f++){
-				geometry[f*6 + 0] = vertices[indices[f*3 + 0]];
-				geometry[f*6 + 1] = vertices[indices[f*3 + 1]];
-				
-				geometry[f*6 + 2] = vertices[indices[f*3 + 1]];
-				geometry[f*6 + 3] = vertices[indices[f*3 + 2]];
-				
-				geometry[f*6 + 4] = vertices[indices[f*3 + 2]];
-				geometry[f*6 + 5] = vertices[indices[f*3 + 0]];
+				geometry[f*3 + 0] = vertices[indices[f*3 + 0]];
+				geometry[f*3 + 1] = vertices[indices[f*3 + 1]];				
+				geometry[f*3 + 2] = vertices[indices[f*3 + 2]];
+
 				
 				vec4 color1 = color[rand()%8];
 				vec4 color2 = color[rand()%8];
 				vec4 color3 = color[rand()%8];
 				
-				colors[f*6 + 0] = color1;
-				colors[f*6 + 1] = color1;
+				colors[f*3 + 0] = color1;
+				colors[f*3 + 1] = color2;
+				colors[f*3 + 2] = color3;				
 
-				colors[f*6 + 2] = color2;				
-				colors[f*6 + 3] = color2;
-
-				colors[f*6 + 4] = color3;
-				colors[f*6 + 5] = color3;
 			}
 
-			model = new PlyModel(faceCount*6, geometry, colors);
+			model = new PlyModel(faceCount*3, geometry, colors);
 			free(vertices);
 			free(indices);
 		} else {
