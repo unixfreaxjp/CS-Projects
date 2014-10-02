@@ -364,6 +364,7 @@ int main( int argc, char **argv )
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
 	glutReshapeFunc(resize);
+	int i = 5;
 	glutIdleFunc(idle);
 	// should add menus
 	// add mouse handler
