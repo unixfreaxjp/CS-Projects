@@ -55,7 +55,7 @@ Grammer::Grammer(char* fileName)
 
 	pattern = start;
 	string newPattern;
-	iter = 1;
+	//iter = 2;
 	for(int i = 0; i < iter; i++){
 		newPattern = "";
 		for(int c = 0; c < pattern.length(); c++){
@@ -82,7 +82,7 @@ Grammer::Grammer(char* fileName)
 
 	pattern = newPattern;
 
-	printf("%s rot %f %f %f\n", fileName, rot.x, rot.y, rot.z);
+	//printf("%s rot %f %f %f\n", fileName, rot.x, rot.y, rot.z);
 }
 
 

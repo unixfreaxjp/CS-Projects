@@ -22,6 +22,8 @@ public:
 	vec4 center;
 	vec4 size;
 
+	mat4 modelTransform;
+
 	float scaleFactor;
 
 	PlyModel(int vertexCount, vec4* vertices, vec4* colors);

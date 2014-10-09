@@ -88,6 +88,7 @@
     <ClCompile Include="InitShader.cpp" />
     <ClCompile Include="PlyModel.cpp" />
     <ClCompile Include="textfile.cpp" />
+    <ClCompile Include="Turtle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Angel.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="PlyModel.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="textfile.h" />
+    <ClInclude Include="Turtle.h" />
     <ClInclude Include="vec.h" />
   </ItemGroup>
   <ItemGroup>

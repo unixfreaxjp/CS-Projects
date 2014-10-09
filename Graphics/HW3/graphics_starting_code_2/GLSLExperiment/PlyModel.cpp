@@ -131,6 +131,8 @@ PlyModel::PlyModel(int vertexCount, vec4* vertices, vec4* colors)
 	this->center = (min+max)/2;
 	this->size = (max-min);
 
+	this->modelTransform = Angel::identity();
+
 	float largestDim = (size.x > size.y)?size.x:size.y;
 	largestDim = (largestDim > size.z)?largestDim:size.z;
 

@@ -9,6 +9,7 @@
 #include <time.h>
 #include "textfile.h"
 #include "Grammer.h"
+#include "Turtle.h"
 //----------------------------------------------------------------------------
 
 using namespace std;
@@ -26,54 +27,79 @@ void bufferPly(PlyModel* model);
 void resize(int w, int h);
 void idle();
 void drawPly(PlyModel* model);
-void drawIFS(Grammer* g);
+void drawIFS(Grammer* g, vec4 loc);
 void color(float r, float g, float b, float a);
-
-
+void color(vec4 c);
+void drawSegmentLZ();
+void addtree(char c);
 typedef Angel::vec4  color4;
 typedef Angel::vec4  point4;
+
+struct treeInstance {
+	float x;
+	float y;
+	float rz;
+	Angel::vec4 color;
+	char grammer;
+};
+
+vec4 COLOR[] = {
+	vec4(1.0, 0.0, 0.0, 1.0),//red
+	vec4(0.0, 1.0, 0.0, 1.0),//green
+	vec4(0.0, 0.0, 1.0, 1.0),//blue
+	vec4(1.0, 1.0, 0.0, 1.0),//yellow
+	vec4(1.0, 0.0, 1.0, 1.0),//magenta
+	vec4(0.0, 1.0, 1.0, 1.0),//cyan
+	vec4(1.0, 0.5, 0.0, 1.0),//orange
+	vec4(0.5, 0.5, 0.5, 1.0),//grey
+};
 
 map <char, Grammer*> trees;
 
 // handle to program
 GLuint program;
+GLuint modelTransform;
 GLuint modelMatrix;
 GLuint viewMatrix;
 GLuint vPosition;
 GLuint vColor;
 GLuint vUseColor;
-GLuint vShear;
-GLuint vTwist;
 GLuint uColor;
 
 CTM modelView;
 mat4 proj;
-bool useColor = true;
+bool useColor = false;
 float shear = 0.0f;
 float twist = 0.0f;
 
+vector<treeInstance> treeVec;
 
+PlyModel* plane;
 PlyModel* sphere;
 PlyModel* cylinder;
 
-int lastIdle;
+PlyModel* car;
 
+int lastIdle;
+float cameraAngle = 0;
 
 void init(void)
 {	
 	//init shaders
 	program = InitShader("vshader1.glsl", "fshader1.glsl");
+	modelTransform = glGetUniformLocationARB(program, "model_transform");
 	modelMatrix = glGetUniformLocationARB(program, "model_matrix");
 	viewMatrix = glGetUniformLocationARB(program, "projection_matrix");
 	vPosition = glGetAttribLocation(program, "vPosition");
 	vColor = glGetAttribLocation(program, "vColor");
 	vUseColor = glGetUniformLocationARB(program, "useColor");
-	vShear = glGetUniformLocationARB(program, "shear");
-	vTwist = glGetUniformLocationARB(program, "twist");
 	uColor = glGetUniformLocationARB(program, "color");
 	// sets the default color to clear screen
 
 	modelView.loc = modelMatrix;
+		addtree('a');
+		addtree('c');
+		addtree('b');
 
     glClearColor( 0.0, 0.0, 0.0, 1.0 ); // black background
 	//draw lines
@@ -82,12 +108,21 @@ void init(void)
 }
 
 void loadModels(){
-
+	plane = loadPly("ply_files/plane.ply");
 	sphere = loadPly("ply_files/sphere.ply");
 	cylinder = loadPly("ply_files/cylinder.ply");
+	car = loadPly("ply_files/big_porsche.ply");
 
+	plane->modelTransform = Angel::Scale(100)*plane->modelTransform;
+	sphere->modelTransform = Angel::Scale(0.1f)*sphere->modelTransform;
+	cylinder->modelTransform =  Angel::Translate(0,0,0.5f)*Angel::Scale(0.7f*0.1f, 0.7f*0.1f, 0.5f)*cylinder->modelTransform;
+	
+	car->modelTransform = Angel::Translate(30,100,0)*Angel::RotateX(90)*Angel::Scale(4) * car->modelTransform;
+
+	bufferPly(plane);
 	bufferPly(sphere);
 	bufferPly(cylinder);
+	bufferPly(car);
 }
 
 void bufferPly(PlyModel* model){
@@ -123,33 +158,44 @@ void display( void )
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );     // clear the window
 	
 	//glBindVertexArray(models[cur]->vao);
-
-	glUniformMatrix4fv( modelMatrix, 1, GL_FALSE, Angel::transpose(modelView.model) );
-	glUniformMatrix4fv( viewMatrix, 1, GL_FALSE, Angel::transpose(proj));
+	glUniformMatrix4fv( modelTransform, 1, GL_FALSE, Angel::transpose(Angel::identity()));
+	glUniformMatrix4fv( modelMatrix, 1, GL_TRUE, modelView.model);
+	glUniformMatrix4fv( viewMatrix, 1, GL_TRUE, proj);
 	glUniform1i(vUseColor, useColor);
-	glUniform1f(vShear, shear);	
-	glUniform1f(vTwist, twist);
 	
+	color(0.0,0.7,0.0,1.0);
+	drawPly(plane);
+
 	color(0.3,0.7,0.3,1);
-	/*drawPly(cylinder);
-	modelView.pushMatrix();
-	modelView.translate(0,0,1);
-	drawPly(sphere);
-	modelView.popMatrix();*/
-	drawIFS(trees['a']);
+
+	for(int i = 0; i < treeVec.size(); i++){
+		treeInstance ti = treeVec.at(i);
+		color(ti.color);
+		modelView.pushMatrix();
+		modelView.rotateX(ti.rz);
+		drawIFS(trees[ti.grammer], vec4(ti.x, ti.y, 0,1));
+		modelView.popMatrix();
+	}
+
+	color(0.5f, 0.3f, 0.8f, 1.0f);
+	drawPly(car);
+
 	glFlush(); // force output to graphics hardware
 
 	// use this call to double buffer
 	glutSwapBuffers();
 }
 
+
 void drawPly(PlyModel* model){
 	glBindVertexArray(model->vao);
 
+	glUniformMatrix4fv(modelTransform, 1, GL_FALSE, Angel::transpose(model->modelTransform));
+
 	glEnable( GL_DEPTH_TEST );
 	modelView.pushMatrix();
-	modelView.translate(-model->center);
-	modelView.scale(model->scaleFactor);
+	//modelView.translate(-model->center);
+	//modelView.scale(model->scaleFactor);
 	//glUniformMatrix4fv( modelMatrix, 1, GL_FALSE, Angel::transpose(modelView.model) );
 	
 	
@@ -157,61 +203,74 @@ void drawPly(PlyModel* model){
 	modelView.popMatrix();
 
 	glDisable( GL_DEPTH_TEST );
+
+	glUniformMatrix4fv(modelTransform, 1, GL_FALSE, Angel::transpose(Angel::identity()));
+
+}
+
+void drawSegmentLZ(){
+	vec4 loc = modelView.model*vec4(0,0,0,1);
 }
 
 void color(float r, float g, float b, float a){
-	glUniform4fv(uColor, 1, vec4(r,g,b,a));
+	color(vec4(r,g,b,a));
 }
 
-void drawIFS(Grammer* g){
-	vec4 turtle = (0,0,0,1);
-	modelView.pushMatrix();
+void color(vec4 c){
+	
+	glUniform4fv(uColor, 1, c);
+}
+
+void drawIFS(Grammer* g, vec4 loc){	
+	Turtle t;
 	for(int i = 0; i < g->pattern.length(); i++){
 		char c = g->pattern[i];
 		switch(c){
 		case 'F':
 			modelView.pushMatrix();
-			modelView.scale(0.5f, 0.5f, 1.0f);
+			
+			modelView.model =  t.rot* modelView.model;
+			
+			modelView.translate(t.loc + loc);
+			drawPly(sphere);
 			drawPly(cylinder);
+
 			modelView.popMatrix();
-			modelView.translate(0,0,g->len);
+			t.forward();
 			break;
 		case 'f':
-			modelView.translate(0,0,g->len);
+			t.forward();
 			break;
 		case '+':
-			turtle.x += g->rot.x;
-			//modelView.rotateX(g->rot.x);
+			t.rot = Angel::RotateX(g->rot.x) * t.rot;
 			break;
 		case '-':
-			turtle.x -= g->rot.y;
-			//modelView.rotateX(-g->rot.x);
+			t.rot = Angel::RotateX(-g->rot.x) * t.rot;
 			break;
 		case '&':
-			//modelView.rotateY(g->rot.y);
+			t.rot = Angel::RotateY(g->rot.y) * t.rot;
 			break;
 		case '^':
-			//modelView.rotateY(-g->rot.y);
+			t.rot = Angel::RotateY(-g->rot.y) * t.rot;
 			break;
 		case '\\':
-			//modelView.rotateZ(g->rot.z);
+			t.rot = Angel::RotateZ(g->rot.z) * t.rot;
 			break;
 		case '/':
-			//modelView.rotateZ(-g->rot.z);
+			t.rot = Angel::RotateZ(-g->rot.z) * t.rot;
 			break;
 		case '|':
-			//modelView.rotateX(180);
+			t.rot = Angel::RotateX(180) * t.rot;
 			break;
 		case '[':
-			//modelView.pushMatrix();
+			t.push();
 			break;
 		case ']':
-			//modelView.popMatrix();
+			t.pop();
 			break;
 		}
 	}
 
-	modelView.popMatrix();
 }
 
 //----------------------------------------------------------------------------
@@ -220,10 +279,16 @@ void drawIFS(Grammer* g){
 void keyboard( unsigned char key, int x, int y )
 {
 
+	addtree(key);
     switch ( key ) {
     case 033:
         exit( EXIT_SUCCESS );
         break;
+	case 'f':
+		treeVec.clear();
+		addtree('a');
+		addtree('c');
+		addtree('b');
 	case 'h':
 		shear += 0.05f;
 		break;
@@ -238,14 +303,46 @@ void keyboard( unsigned char key, int x, int y )
 		twist -= 0.05f;
 		if(twist < 0.0f) twist = 0.0f;
 		break;
-	case 'c':
-		useColor = !useColor;
+	case '8':
+		proj = proj* Angel::RotateY(5);
 		break;
+	case '2':
+		proj = proj* Angel::RotateY(-5);
+		break;	
+	case '1':
+		proj = proj* Angel::RotateX(5);
+		break;
+	case '3':
+		proj = proj* Angel::RotateX(-5);
+		break;	
+	case '4':
+		proj = proj* Angel::RotateZ(5);
+		break;
+	case '6':
+		proj = proj* Angel::RotateZ(-5);
+		break;
+	case '5':
+		resize(width, height);
+		break;
+
 
 
     }
 
 	display();
+}
+
+void addtree(char key){
+		if(trees.find(key) != trees.end()){
+		treeInstance tree;
+		tree.x = ((float)rand()/(float)(RAND_MAX))*200 - 100;
+		tree.y = ((float)rand()/(float)(RAND_MAX))*200 - 100;
+		tree.rz = ((float)rand()/(float)(RAND_MAX))*360.0f;
+		tree.color = COLOR[rand()%8];
+		tree.grammer = key;	
+		cout << tree.rz << endl;
+		treeVec.push_back(tree);
+	}	
 }
 
 //resize handler
@@ -255,9 +352,9 @@ void resize(int w, int h){
 
 	glViewport(0, 0, width, height);
 
-	proj = Angel::Perspective((GLfloat)45.0, (GLfloat)width/(GLfloat)height, (GLfloat)0.1, (GLfloat)100.0);
+	proj = Angel::Perspective((GLfloat)70.0, (GLfloat)width/(GLfloat)height, (GLfloat)0.1, (GLfloat)100.0);
 	//proj = proj * Angel::Translate(0.0f, 0.5f, -1.0f);
-	proj = proj * Angel::LookAt(vec4(0.0f, 0.5f, -1.0f, 1.0f), vec4(0.0f,0.0f,0.0f,1.0f), vec4(0.0f,0.0f,1.0f,1.0f));
+	proj = proj * Angel::LookAt(vec4(100.0f, 200.0f, 100, 1.0f), vec4(0.0f,0.0f,0.0f,1.0f), vec4(0.0f,0.0f,1.0f,1.0f));
 }
 
 void idle(){
@@ -287,7 +384,7 @@ int main( int argc, char **argv )
 	trees['d'] = d;
 	trees['e'] = e;
 	
-	cout << a->pattern << endl;
+	//cout << a->pattern << endl;
 
 	srand(time(NULL));
 	// init glut
