@@ -98,7 +98,7 @@ void init(void)
 	modelView.loadIdentity();
 
 	//set up lighting
-	glUniform4fv(lightPosition, 1, vec4(-0.5, 1.0, 1.0, 0));
+	glUniform4fv(lightPosition, 1, vec4(-0.5, 1.0, -1.0, 0));
 	glUniform4fv(ambient, 1, vec4(0.2f, 0.2f, 0.2f, 1));
 	glUniform4fv(diffuse, 1, vec4(0.6f, 0.2f, 0.2f, 1));
 	glUniform4fv(specular, 1, vec4(0.9f, 0.9f, 0.9f, 1));
@@ -287,7 +287,7 @@ void display( void )
 	modelView.translate(-cow->center + vec3(0.0f, -1.5f, 0.0f));
 	modelView.scale(cow->scaleFactor*1.5f);
 	modelView.rotateY(rotation*rotateDirection);
-		
+	glUniform4fv(lightPosition, 1, vec4(cos(Angel::DegreesToRadians*rotation), 1.0, sin(DegreesToRadians*rotation), 0));
 	
 	glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
 	modelView.popMatrix();
