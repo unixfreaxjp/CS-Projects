@@ -131,7 +131,9 @@ void init(void)
 
 	color(1, 0, 0, 1);
 	// sets the default color to clear screen
-    glClearColor( 0.2, 0.2, 0.2, 1.0 ); // black background
+    glClearColor( 0.0, 0.0, 0.0, 1.0 ); // black background
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//draw lines
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
@@ -372,8 +374,9 @@ void display( void )
 
 	modelView.pushMatrix();
 	
-		modelView.translate(-cow->center + vec3(0.0f, -1.0f, 0.0f));
+		modelView.translate(-cow->center + vec4(0,-1,0,1));
 		modelView.scale(cow->scaleFactor*1.5f);
+		//rotation = 0;
 		modelView.rotateY(rotation*rotateDirection);
 		glUniform4fv(lightPosition, 1, vec4(cos(Angel::DegreesToRadians*rotation), 1.0, sin(DegreesToRadians*rotation), 0));
 		glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
@@ -381,17 +384,36 @@ void display( void )
 		if(shadowsOn){
 			color(0,0,0,1);
 			glUniform1i(shadow, true);
+			
+			lightPos = vec4(-1.0,-1,-1.0,0);
+			mat4 lx = Angel::identity();
+			mat4 ly = Angel::identity();
+			mat4 lz = Angel::identity();
+			lx[3][0] = -1.0f/lightPos.x;
+			ly[3][1] = -1.0f/lightPos.y;
+			lz[3][2] = -1.0f/lightPos.z;
+
 			modelView.pushMatrix();
-
-				modelView.scale(1, 0, 1);
-				modelView.translate(-.3, -.99, -.3);
-				//mat4 shadowMat = Angel::Translate(lightPos)*lightProjY*Angel::Translate(-lightPos);
-				//modelView.translate(vec4(0.0f, -1.0f, 0.0f,1));
-				//modelView.model = shadowMat*modelView.model;
-			//	modelView.apply();
+				modelView.model = Angel::Translate(lightPos)*lx*Angel::Translate(-lightPos)*modelView.model;
+				modelView.scale(0,2,2);
+				modelView.translate(-0.99,0,0);
 				glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
-
 			modelView.popMatrix();
+
+			modelView.pushMatrix();
+				modelView.model = Angel::Translate(lightPos)*ly*Angel::Translate(-lightPos)*modelView.model;
+				modelView.scale(2,0,2);
+				modelView.translate(0,-0.99,0);
+				glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
+			modelView.popMatrix();
+
+			modelView.pushMatrix();
+				modelView.model = Angel::Translate(lightPos)*lz*Angel::Translate(-lightPos)*modelView.model;
+				modelView.scale(2,2,0);
+				modelView.translate(0,0,-0.99);
+				glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
+			modelView.popMatrix();
+
 
 			glUniform1i(shadow, false);
 		}
@@ -480,7 +502,7 @@ int main( int argc, char **argv )
 	// init glut
     glutInit( &argc, argv );
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-    glutInitWindowSize( 512, 512 );
+    glutInitWindowSize( 600, 512 );
 	width = 512;
 	height = 512;
 
