@@ -4,13 +4,20 @@ uniform vec4 color;
 uniform vec4 ambient, diffuse, specular;
 uniform vec4 LightPosition;
 uniform float shininess;
-out vec4 fColor;
+
 uniform bool shadow;
-in vec3 R;
+
+uniform int mode;
 uniform samplerCube cube;
+
+in vec3 R;
+in vec3 T;
+
 in vec3 fN;
 in vec3 fL;
 in vec3 fE;
+
+out vec4 fColor;
 
 void main() 
 { 
@@ -30,20 +37,26 @@ void main()
 		specularColor = vec4(0.0, 0.0, 0.0, 1.0);
 	}
 
-	vec4 refractColor = textureCube(cube, R);
-	//refractColor = mix(refractColor, vec4(1,1,1,1), 0.3);
+	vec4 phongColor = ambient + diffuseColor + specularColor;
+	vec4 reflectColor = textureCube(cube, R);
+	vec4 refractColor = textureCube(cube, T);
 
-	fColor = refractColor;
-
-	//fColor = ambient + diffuseColor + specularColor;
-	//fColor.a = 1.0;
+	if(mode == 1){
+		fColor = phongColor;
+	} else if(mode == 2){
+		fColor = reflectColor;
+	} else if (mode == 3) {
+		fColor = mix(refractColor,specularColor+vec4(0.3,0.3,0.3,1), 0.1);
+	} else {
+		fColor = mix(reflectColor, refractColor, 0.5);
+	}
+	
+	fColor.a = 1.0;
 
 	if(shadow){
-		fColor = vec4(0,0,0,.4);
+		fColor = vec4(0,0,0,0.5);
 	}
 
-	//fColor.xyz = N;
-	//fColor.a = 1.0;
      
 } 
 

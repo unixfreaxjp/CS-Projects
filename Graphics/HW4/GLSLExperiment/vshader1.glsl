@@ -21,8 +21,12 @@ void main()
 	if(LightPosition.w != 0.0){
 		fL = LightPosition.xyz - vPosition.xyz;
 	}
-	vec3 NN = normalize((model_matrix*vNormal).xyz);
-	R = reflect(vPosition.xyz, NN);
+
+	vec4 eyePos = vPosition;
+	vec4 NN = model_matrix*vNormal;
+	vec3 N = normalize(NN.xyz);
+	R = reflect(eyePos.xyz, N.xyz);
+	T = refract(eyePos.xyz, N.xyz, 2);
 	gl_Position = projection_matrix*model_matrix*vPosition;
 
 } 

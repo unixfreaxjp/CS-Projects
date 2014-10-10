@@ -43,6 +43,7 @@ GLuint ambient, diffuse, specular;
 GLuint shininess;
 GLuint shadow;
 GLuint vCube;
+GLuint vMode;
 
 GLuint wallProgram;
 GLuint wPosition;
@@ -72,12 +73,17 @@ int lastIdle;
 vec4 translation = vec4(0.0, 0.0, 0.0, 1.0);
 vec4 dTranslation = vec4(0,0,0,0);
 
-vec4 lightPos(0,0.5,0,1);
+vec4 lightPos(1,1,1,1);
 mat4 lightProjX = Angel::identity();
 mat4 lightProjY = Angel::identity();
 mat4 lightProjZ = Angel::identity();
 
 GLuint cubeMap;
+GLuint cubeTex;
+
+bool shadowsOn = true;
+bool texturesOn = true;
+int mode = 1;
 
 void init(void)
 {	
@@ -95,6 +101,7 @@ void init(void)
 	shininess = glGetUniformLocation(program, "shininess");
 	shadow = glGetUniformLocation(program, "shadow");
 	vCube = glGetUniformLocation(program, "cube");
+	vMode = glGetUniformLocation(program, "mode");
 
 	wallProgram = InitShader("vshaderwall.glsl", "fshaderwall.glsl");
 	wallProj = glGetUniformLocationARB(wallProgram, "projection_matrix");
@@ -110,19 +117,21 @@ void init(void)
 
 	//vec4 lightPos = vec4(-0.5, 1.0, -1.0, 0);
 	//set up lighting
+	
 	glUniform4fv(lightPosition, 1, lightPos);
 	glUniform4fv(ambient, 1, vec4(0.2f, 0.2f, 0.2f, 1));
 	glUniform4fv(diffuse, 1, vec4(0.6f, 0.2f, 0.2f, 1));
 	glUniform4fv(specular, 1, vec4(0.9f, 0.9f, 0.9f, 1));
-	glUniform1f(shininess, 50);
-	
-	lightProjX[3][0] = -1.0/lightPos.x;
+	glUniform1f(shininess, 60);
+	glUniform1i(vMode, 1);
+
+	lightProjX[3][1] = -1.0/lightPos.x;
 	lightProjY[3][1] = -1.0/lightPos.y;
-	lightProjZ[3][2] = -1.0/lightPos.z;
+	lightProjZ[3][1] = -1.0/lightPos.z;
 
 	color(1, 0, 0, 1);
 	// sets the default color to clear screen
-    glClearColor( 1.0, 1.0, 1.0, 1.0 ); // black background
+    glClearColor( 0.2, 0.2, 0.2, 1.0 ); // black background
 	//draw lines
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
@@ -131,38 +140,37 @@ void init(void)
 void loadModels(){
 
 	glEnable(GL_TEXTURE_CUBE_MAP);
-	GLuint cubeTex;
 	glGenTextures(1, &cubeTex);
-	glActiveTexture(GL_TEXTURE3);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
 
-		bmpread_t px;
+	bmpread_t px;
 	if(!bmpread("nvposx.bmp", 0, &px)){
 		cout << "couldn't read px\n";
 		exit(1);
 	}
-		bmpread_t nx;
+	bmpread_t nx;
 	if(!bmpread("nvnegx.bmp", 0, &nx)){
 		
 		cout << "couldn't read nx\n";
 		exit(1);
 	}
-		bmpread_t py;
+	bmpread_t py;
 	if(!bmpread("nvposy.bmp", 0, &py)){
 		cout << "couldn't read py\n";
 		exit(1);
 	}
-		bmpread_t ny;
+	bmpread_t ny;
 	if(!bmpread("nvnegy.bmp", 0, &ny)){
 		cout << "couldn't read ny\n";
 		exit(1);
 	}
-		bmpread_t pz;
+	bmpread_t pz;
 	if(!bmpread("nvposz.bmp", 0, &pz)){
 		cout << "couldn't read pz\n";
 		exit(1);
 	}
-		bmpread_t nz;
+	bmpread_t nz;
 	if(!bmpread("nvnegz.bmp", 0, &nz)){
 		cout << "couldn't read nz\n";
 		exit(1);
@@ -171,12 +179,22 @@ void loadModels(){
 	glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB, px.width, px.height, 0, GL_RGB, GL_UNSIGNED_BYTE, px.rgb_data );
 	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGB, nx.width, nx.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nx.rgb_data );
 	glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGB, py.width, py.height, 0, GL_RGB, GL_UNSIGNED_BYTE, py.rgb_data );
-	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, nx.width, ny.height, 0, GL_RGB, GL_UNSIGNED_BYTE, ny.rgb_data );
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, ny.width, ny.height, 0, GL_RGB, GL_UNSIGNED_BYTE, ny.rgb_data );
 	glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, pz.width, pz.height, 0, GL_RGB, GL_UNSIGNED_BYTE, pz.rgb_data );
-	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB, nx.width, nz.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nz.rgb_data );
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB, nz.width, nz.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nz.rgb_data );
+	
+	bmpread_free(&px);
+	bmpread_free(&nx);
+	bmpread_free(&py);
+	bmpread_free(&ny);
+	bmpread_free(&pz);
+	bmpread_free(&nz);
 	
 	glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_REPEAT);
     glTexParameterf( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
 	glUseProgram(program);
 	glUniform1i(vCube, cubeTex);
@@ -196,7 +214,7 @@ void loadModels(){
 		exit(1);
 	}
 
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE1);
 	glGenTextures(1, &grassTex);
 	glBindTexture(GL_TEXTURE_2D, grassTex);
 
@@ -208,7 +226,7 @@ void loadModels(){
 	 glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, grassimg.width, grassimg.height, 0, GL_RGB, GL_UNSIGNED_BYTE, grassimg.rgb_data );
 	bmpread_free(&grassimg);
 
-	glActiveTexture(GL_TEXTURE1);
+	glActiveTexture(GL_TEXTURE2);
 	glGenTextures(1, &stoneTex);
 	glBindTexture(GL_TEXTURE_2D, stoneTex);
 
@@ -263,9 +281,9 @@ void loadModels(){
 		4,4,
 		0,4,
 		0,0,
-		5,0,
-		5,5,
-		0,5,
+		4,0,
+		4,4,
+		0,4,
 	};
 	
 	glUseProgram(wallProgram);
@@ -331,59 +349,52 @@ void display( void )
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );     // clear the window
 	
 	glUseProgram(wallProgram);
-	glUniform1i(wTexture, 0);
-	glUniformMatrix4fv(wallProj, 1, GL_TRUE, proj);
-	glBindVertexArray(ground);
-	glUniform1i(wallUseTex, true);
-	glUniform4fv(wallColor, 1,  vec4(0.6, 0.6, 0.6, 1));
 	
+	glUniform1i(wallUseTex, texturesOn);
+	glUniform4fv(wallColor, 1,  vec4(0.8, 0.8, 0.8, 1));
+	glUniformMatrix4fv(wallProj, 1, GL_TRUE, proj);
+	
+	glUniform1i(wTexture, 1);
+	glBindVertexArray(ground);
 	glDrawArrays(GL_QUADS, 0, 4);
 	
-	
+	glUniform1i(wTexture, 2);
+	glUniform4fv(wallColor, 1,  vec4(0.4, 0.4, 1.0, 1));
 	glBindVertexArray(walls);
-	glUniform1i(wTexture, 1);
 	glDrawArrays(GL_QUADS, 0, 8);
-
 	
 	glUseProgram(program);
-	
+	glUniform1i(vCube, 0);
+	glUniform1i(vMode, mode);
 	glUniformMatrix4fv( viewMatrix, 1, GL_TRUE, proj);
 	glBindVertexArray(cow->vao);
-	color(1,0,0,1);
-	modelView.pushMatrix();
-	
-	modelView.translate(-cow->center + vec3(0.0f, -1.0f, 0.0f));
-	modelView.scale(cow->scaleFactor*1.5f);
-	modelView.rotateY(rotation*rotateDirection);
-	glUniform4fv(lightPosition, 1, vec4(cos(Angel::DegreesToRadians*rotation), 1.0, sin(DegreesToRadians*rotation), 0));
-	glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
-
-	
-	color(0,0,0,1);
-	glUniform1i(shadow, true);
+	color(1,1,1,1);
 
 	modelView.pushMatrix();
-	modelView.scale(1, 0, 1);
-	modelView.translate(-.3, -.99, -.3);
-	//mat4 shadowMat = Angel::Translate(lightPos)*lightProjY*Angel::Translate(-lightPos);
-	//modelView.translate(vec4(0.0f, -1.0f, 0.0f,1));
-	//modelView.model = shadowMat*modelView.model;
-	//modelView.apply();
-	glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
-	modelView.popMatrix();
+	
+		modelView.translate(-cow->center + vec3(0.0f, -1.0f, 0.0f));
+		modelView.scale(cow->scaleFactor*1.5f);
+		modelView.rotateY(rotation*rotateDirection);
+		glUniform4fv(lightPosition, 1, vec4(cos(Angel::DegreesToRadians*rotation), 1.0, sin(DegreesToRadians*rotation), 0));
+		glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
 
-		modelView.pushMatrix();
-	modelView.scale(0, 1, 1);
-	modelView.translate( -.99,0, 0);
-	//glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
-	modelView.popMatrix();
+		if(shadowsOn){
+			color(0,0,0,1);
+			glUniform1i(shadow, true);
+			modelView.pushMatrix();
 
-		modelView.pushMatrix();
-	modelView.scale(1, 1, 0);
-	modelView.translate(0, 0,-.99);
-	//glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
-	modelView.popMatrix();
-	glUniform1i(shadow, false);
+				modelView.scale(1, 0, 1);
+				modelView.translate(-.3, -.99, -.3);
+				//mat4 shadowMat = Angel::Translate(lightPos)*lightProjY*Angel::Translate(-lightPos);
+				//modelView.translate(vec4(0.0f, -1.0f, 0.0f,1));
+				//modelView.model = shadowMat*modelView.model;
+			//	modelView.apply();
+				glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
+
+			modelView.popMatrix();
+
+			glUniform1i(shadow, false);
+		}
 
 	modelView.popMatrix();
 
@@ -403,15 +414,27 @@ void display( void )
 void keyboard( unsigned char key, int x, int y )
 {
 	bool newPly = false;
-
+	int cToMode[] = {2, 2, 1, 2, 3};
+	int dToMode[] = {3, 3, 3, 1, 2};
     switch ( key ) {
     case 033:
         exit( EXIT_SUCCESS );
         break;
-	case 'W':
-		translation = vec4(0,0,0,1);
-		dTranslation = vec4(0,0,0,0);
-		rotation = 0.0f;
+	case 'a':
+	case 'A':
+		shadowsOn = !shadowsOn;
+		break;
+	case 'b':
+	case 'B':
+		texturesOn = !texturesOn;
+		break;
+	case 'c':
+	case 'C':
+		mode = cToMode[mode];
+		break;
+	case 'd':
+	case 'D':
+		mode = dToMode[mode];
 		break;
     }
 
