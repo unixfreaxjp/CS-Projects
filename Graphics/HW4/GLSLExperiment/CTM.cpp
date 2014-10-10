@@ -58,7 +58,7 @@ void CTM::scale(float s){
 }
 
 void CTM::apply(){
-	glUniformMatrix4fv(CTM::loc, 1, FALSE, Angel::transpose(model));
+	glUniformMatrix4fv(CTM::loc, 1, TRUE, model);
 }
 
 CTM::~CTM(void){

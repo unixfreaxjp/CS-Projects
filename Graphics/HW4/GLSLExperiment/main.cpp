@@ -41,6 +41,8 @@ GLuint vColor;
 GLuint lightPosition;
 GLuint ambient, diffuse, specular;
 GLuint shininess;
+GLuint shadow;
+GLuint vCube;
 
 GLuint wallProgram;
 GLuint wPosition;
@@ -70,6 +72,13 @@ int lastIdle;
 vec4 translation = vec4(0.0, 0.0, 0.0, 1.0);
 vec4 dTranslation = vec4(0,0,0,0);
 
+vec4 lightPos(0,0.5,0,1);
+mat4 lightProjX = Angel::identity();
+mat4 lightProjY = Angel::identity();
+mat4 lightProjZ = Angel::identity();
+
+GLuint cubeMap;
+
 void init(void)
 {	
 	//init shaders
@@ -84,6 +93,8 @@ void init(void)
 	diffuse = glGetUniformLocation(program, "diffuse");
 	specular = glGetUniformLocation(program, "specular");
 	shininess = glGetUniformLocation(program, "shininess");
+	shadow = glGetUniformLocation(program, "shadow");
+	vCube = glGetUniformLocation(program, "cube");
 
 	wallProgram = InitShader("vshaderwall.glsl", "fshaderwall.glsl");
 	wallProj = glGetUniformLocationARB(wallProgram, "projection_matrix");
@@ -97,22 +108,79 @@ void init(void)
 	glUseProgram(program);
 	modelView.loadIdentity();
 
+	//vec4 lightPos = vec4(-0.5, 1.0, -1.0, 0);
 	//set up lighting
-	glUniform4fv(lightPosition, 1, vec4(-0.5, 1.0, -1.0, 0));
+	glUniform4fv(lightPosition, 1, lightPos);
 	glUniform4fv(ambient, 1, vec4(0.2f, 0.2f, 0.2f, 1));
 	glUniform4fv(diffuse, 1, vec4(0.6f, 0.2f, 0.2f, 1));
 	glUniform4fv(specular, 1, vec4(0.9f, 0.9f, 0.9f, 1));
 	glUniform1f(shininess, 50);
+	
+	lightProjX[3][0] = -1.0/lightPos.x;
+	lightProjY[3][1] = -1.0/lightPos.y;
+	lightProjZ[3][2] = -1.0/lightPos.z;
 
 	color(1, 0, 0, 1);
 	// sets the default color to clear screen
-    glClearColor( 0.0, 0.0, 0.0, 1.0 ); // black background
+    glClearColor( 1.0, 1.0, 1.0, 1.0 ); // black background
 	//draw lines
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
 }
 
 void loadModels(){
+
+	glEnable(GL_TEXTURE_CUBE_MAP);
+	GLuint cubeTex;
+	glGenTextures(1, &cubeTex);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, cubeTex);
+
+		bmpread_t px;
+	if(!bmpread("nvposx.bmp", 0, &px)){
+		cout << "couldn't read px\n";
+		exit(1);
+	}
+		bmpread_t nx;
+	if(!bmpread("nvnegx.bmp", 0, &nx)){
+		
+		cout << "couldn't read nx\n";
+		exit(1);
+	}
+		bmpread_t py;
+	if(!bmpread("nvposy.bmp", 0, &py)){
+		cout << "couldn't read py\n";
+		exit(1);
+	}
+		bmpread_t ny;
+	if(!bmpread("nvnegy.bmp", 0, &ny)){
+		cout << "couldn't read ny\n";
+		exit(1);
+	}
+		bmpread_t pz;
+	if(!bmpread("nvposz.bmp", 0, &pz)){
+		cout << "couldn't read pz\n";
+		exit(1);
+	}
+		bmpread_t nz;
+	if(!bmpread("nvnegz.bmp", 0, &nz)){
+		cout << "couldn't read nz\n";
+		exit(1);
+	}
+	
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB, px.width, px.height, 0, GL_RGB, GL_UNSIGNED_BYTE, px.rgb_data );
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGB, nx.width, nx.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nx.rgb_data );
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGB, py.width, py.height, 0, GL_RGB, GL_UNSIGNED_BYTE, py.rgb_data );
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, nx.width, ny.height, 0, GL_RGB, GL_UNSIGNED_BYTE, ny.rgb_data );
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, pz.width, pz.height, 0, GL_RGB, GL_UNSIGNED_BYTE, pz.rgb_data );
+	glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB, nx.width, nz.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nz.rgb_data );
+	
+	glTexParameteri( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf( GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glUseProgram(program);
+	glUniform1i(vCube, cubeTex);
+
 	cow = loadPly("ply_files/cow.ply");
 	bufferPly(cow);
 
@@ -284,12 +352,39 @@ void display( void )
 	color(1,0,0,1);
 	modelView.pushMatrix();
 	
-	modelView.translate(-cow->center + vec3(0.0f, -1.5f, 0.0f));
+	modelView.translate(-cow->center + vec3(0.0f, -1.0f, 0.0f));
 	modelView.scale(cow->scaleFactor*1.5f);
 	modelView.rotateY(rotation*rotateDirection);
 	glUniform4fv(lightPosition, 1, vec4(cos(Angel::DegreesToRadians*rotation), 1.0, sin(DegreesToRadians*rotation), 0));
-	
 	glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
+
+	
+	color(0,0,0,1);
+	glUniform1i(shadow, true);
+
+	modelView.pushMatrix();
+	modelView.scale(1, 0, 1);
+	modelView.translate(-.3, -.99, -.3);
+	//mat4 shadowMat = Angel::Translate(lightPos)*lightProjY*Angel::Translate(-lightPos);
+	//modelView.translate(vec4(0.0f, -1.0f, 0.0f,1));
+	//modelView.model = shadowMat*modelView.model;
+	//modelView.apply();
+	glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
+	modelView.popMatrix();
+
+		modelView.pushMatrix();
+	modelView.scale(0, 1, 1);
+	modelView.translate( -.99,0, 0);
+	//glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
+	modelView.popMatrix();
+
+		modelView.pushMatrix();
+	modelView.scale(1, 1, 0);
+	modelView.translate(0, 0,-.99);
+	//glDrawArrays(GL_TRIANGLES, 0, cow->vertexCount);
+	modelView.popMatrix();
+	glUniform1i(shadow, false);
+
 	modelView.popMatrix();
 
 
@@ -324,7 +419,7 @@ void keyboard( unsigned char key, int x, int y )
 }
 
 void color(float r, float g, float b, float a){	
-	glUniform4fv(ambient, 1, vec4(r, g, b, a)*0.2f);
+	glUniform4fv(ambient, 1, vec4(r, g, b, a)*0.3f);
 	glUniform4fv(diffuse, 1, vec4(r, g, b, a)*0.6f);
 	//glUniform4fv(wallColor,1,  vec4(r, g, b, a));
 }
