@@ -436,8 +436,8 @@ void display( void )
 void keyboard( unsigned char key, int x, int y )
 {
 	bool newPly = false;
-	int cToMode[] = {2, 2, 1, 2, 3};
-	int dToMode[] = {3, 3, 3, 1, 2};
+	int cToMode[] = {2, 2, 1, 4, 3};
+	int dToMode[] = {3, 3, 4, 1, 2};
     switch ( key ) {
     case 033:
         exit( EXIT_SUCCESS );
