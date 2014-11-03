@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	char* echoString;						//string to send to server
 	char echoBuffer[RCVBUFSIZE];			//buffer for echo string
 	unsigned int echoStringLen;				//length of string to echo
-	int bytedRecieved, totalBytedRecieved;	//bytes read in single recv and total bytes read
+	int bytesRecieved, totalBytesRecieved;	//bytes read in single recv and total bytes read
 
 	if(argc < 3 || argc > 4){				//test for correct arguments
 		fprintf(stderr, "Usage: %s <Server IP> <Echo Word> [<Echo Port>]\n", argv[0]);
@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 	memset(&echoServerAddr, 0, sizeof(echoServerAddr));		//zero out structure
 	echoServerAddr.sin_family = AF_INET;					//internet address family
 	echoServerAddr.sin_addr.s_addr = inet_addr(serverIP);	//server ip address
-	echoServerAddr.sin_port - htons(echoServerPort);		//server port
+	echoServerAddr.sin_port = htons(echoServerPort);		//server port
 
 	//establish connection to the echo server
 	if(connect(sock, (struct sockaddr*)&echoServerAddr, sizeof(echoServerAddr)) < 0){
@@ -58,28 +58,28 @@ int main(int argc, char** argv)
 	}
 
 	//recieve the same string back from the server
-	totalBytedRecieved = 0;
-	printf("Recieved: ");	//set to print the echoed string
+	totalBytesRecieved = 0;
+	printf("Client recieved: ");	//set to print the echoed string
 
-	while(totalBytedRecieved < echoStringLen){
+	while(totalBytesRecieved < echoStringLen){
 		//recieve up to the buffer size (minus 1 to leave space for the null terminator) bytes from the sender
-		if((bytedRecieved = recv(sock, echoBuffer, RCVBUFSIZE-1, 0)) <= 0){
+		if((bytesRecieved = recv(sock, echoBuffer, RCVBUFSIZE-1, 0)) <= 0){
 			dieWithError("recv() failed for connection closed prematurely");
 		}
-		totalBytedRecieved += bytedRecieved;	//keep tally of total bytes
-		echoBuffer[bytedRecieved] = '\0';		//terminate string
+		totalBytesRecieved += bytesRecieved;	//keep tally of total bytes
+		echoBuffer[bytesRecieved] = '\0';		//terminate string
 		printf("%s", echoBuffer);
 
 	}
 
 	printf("\n");	//print final linefeed
-	close(socket);
+	close(sock);	//close socket
 	exit(0);
 
 }
 
 void dieWithError(char* errorMessage)
 {
-	fprintf(stderr, "%s", errorMessage);
+	fprintf(stderr, "%s\n", errorMessage);
 	exit(1);
 }

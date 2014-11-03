@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #define MAXPENDING 5
+#define RECVBUFSIZE 32
 
 void dieWithError(char* errorMessage); //error handling function
 void handleTCPClient(int clientSocket);  //TCP client handling function
@@ -49,26 +50,44 @@ int main(int argc, char** argv)
 		dieWithError("listen() failed");
 	}
 
-	while(1){	//run forever
-		//set the size of the in-out parameter
-		clientLen = sizeof(echoClientAddr);
+	//set the size of the in-out parameter
+	clientLen = sizeof(echoClientAddr);
 
-		//wait for client to connect
-		if((clientSocket = accept(serverSocket, (struct sockaddr*)&echoClientAddr, clientLen)) < 0){
-			dieWithError("accept() failed");
-		}
-
-		//clientSocket is connected to a client
-		printf("Handling client %s\n", inet_ntoa(echoClientAddr.sin_addr));
-		handleTCPClient(clientSocket);
+	//wait for client to connect
+	if((clientSocket = accept(serverSocket, (struct sockaddr*)&echoClientAddr, &clientLen)) < 0){
+		dieWithError("accept() failed");
 	}
+
+	//clientSocket is connected to a client
+	printf("Handling client %s\n", inet_ntoa(echoClientAddr.sin_addr));
+	handleTCPClient(clientSocket);
+	
 }
 
-void handleTCPClient(int clientSocket){
+void handleTCPClient(int clientSocket)
+{
+	char echoBuffer[RECVBUFSIZE];
+	int msgSize;
+
+	//recieve message from client
+	if((msgSize = recv(clientSocket, echoBuffer, RECVBUFSIZE, 0)) < 0){
+		dieWithError("recv() failed");
+	}
+
+	//echo message back to client
+	if(send(clientSocket, echoBuffer, msgSize, 0) != msgSize){
+		dieWithError("send() failed");
+	}
+
+	recv(clientSocket, echoBuffer, RECVBUFSIZE, 0);
+
+	close(clientSocket);
+
 
 }
 
-void dieWithError(char* errorMessage){
-	fprintf(stderr, "%s", errorMessage);
+void dieWithError(char* errorMessage)
+{
+	fprintf(stderr, "%s\n", errorMessage);
 	exit(1);
 }

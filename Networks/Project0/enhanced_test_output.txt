@@ -1,0 +1,13 @@
+akshay@ubuntu:~/git/CS-Projects/Networks/Project0/enhanced$ ./echo_client localhost one two three yeahyueahkasjdfalsdhf nope
+EnhancedClient recieved: one
+EnhancedClient recieved: two
+EnhancedClient recieved: three
+The string "yeahyueahkasjdfalsdhf" is longer than 12 bytes
+EnhancedClient recieved: nope
+
+
+
+akshay@ubuntu:~/git/CS-Projects/Networks/Project0/enhanced$ ./echo_server
+Handling client 127.0.0.1
+EnhancedServer echoed 4 strings.
+

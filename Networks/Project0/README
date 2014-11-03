@@ -1,0 +1,25 @@
+Files:
+README - this file
+basic_test_output.txt - has test output from running the basic client and server
+enhanced_test_output.txt - has test output from running the enhanced client and server
+basic/echo_server.c - source for basic server
+basic/echo_client.c - source for basic client
+basic/Makefile - basic server/client makefile
+enhanced/echo_server.c - source for enhanced server
+enhanced/echo_client.c - source for enhanced client
+enhanced/Makefile - enhanced server/client makefile\
+
+Building:
+These commands will work for both versions
+make - build server and client
+make clean - delete server and client binaries
+make server - build only the server
+make client - build only the client
+
+Running BASIC:
+server: ./echo_server <port>
+client: ./echo_client <server address> <message> [<port>]
+
+Running ENHANCED:
+server: ./echo_server
+cliebt: ./echo_client <server name> <message 1>  [<message 2>]  [<message 3>]  [<message 4>]  [<message 5>]
