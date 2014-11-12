@@ -1,0 +1,15 @@
+Files:
+lclient.c - location client source
+lserver.c - location server soure
+Makefile - makefile
+LClient.txt - test data
+
+Building:
+to build: make
+to clean: make clean
+
+Running:
+server: ./lserver
+client ./lclient [servername] [file]
+
+the list command does not work.
