@@ -1,0 +1,12 @@
+Files:
+Makefile - makefile for program 2
+webclient.c - source for web client
+
+Building:
+To build the project: make
+To clean: clean
+
+Running: 
+to run: ./webclient URL [-f|-nf|-ping|-pkt|-info] [file]
+
+The [file] arg is ignored unless the -f flag is used.
